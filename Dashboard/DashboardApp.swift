@@ -1,17 +1,17 @@
 //
-//  DashboardApp.swift
-//  Dashboard
+//  Director_DashboardApp.swift
+//  Director Dashboard
 //
-//  Created by ADJ on 13/04/2024.
+//  Created by ADJ on 06/01/2024.
 //
 
 import SwiftUI
 
 @main
-struct DashboardApp: App {
+struct Director_DashboardApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Dashboard()
         }
     }
 }

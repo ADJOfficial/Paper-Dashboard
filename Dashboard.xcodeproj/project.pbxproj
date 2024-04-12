@@ -8,17 +8,81 @@
 
 /* Begin PBXBuildFile section */
 		442ACF232BC9BE1900418115 /* DashboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF222BC9BE1900418115 /* DashboardApp.swift */; };
-		442ACF252BC9BE1900418115 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF242BC9BE1900418115 /* ContentView.swift */; };
 		442ACF272BC9BE1A00418115 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 442ACF262BC9BE1A00418115 /* Assets.xcassets */; };
 		442ACF2A2BC9BE1A00418115 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 442ACF292BC9BE1A00418115 /* Preview Assets.xcassets */; };
+		442ACF312BC9BE7B00418115 /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF302BC9BE7B00418115 /* Dashboard.swift */; };
+		442ACF342BC9BEDF00418115 /* DirectorLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF332BC9BEDF00418115 /* DirectorLogin.swift */; };
+		442ACF362BC9BEF200418115 /* HODLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF352BC9BEF200418115 /* HODLogin.swift */; };
+		442ACF382BC9BF0100418115 /* FacultyLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF372BC9BF0100418115 /* FacultyLogin.swift */; };
+		442ACF3A2BC9BF1A00418115 /* DataCellLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF392BC9BF1A00418115 /* DataCellLogin.swift */; };
+		442ACF3D2BC9BFB600418115 /* ViewYourCourses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF3C2BC9BFB600418115 /* ViewYourCourses.swift */; };
+		442ACF3F2BC9BFD900418115 /* CoveredTopics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF3E2BC9BFD900418115 /* CoveredTopics.swift */; };
+		442ACF412BC9BFF900418115 /* PaperStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF402BC9BFF900418115 /* PaperStatus.swift */; };
+		442ACF432BC9C01300418115 /* SetPaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF422BC9C01300418115 /* SetPaper.swift */; };
+		442ACF452BC9C02700418115 /* ViewCLOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF442BC9C02700418115 /* ViewCLOs.swift */; };
+		442ACF472BC9C04200418115 /* ViewTopics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF462BC9C04200418115 /* ViewTopics.swift */; };
+		442ACF4B2BC9C0A700418115 /* FacultyRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF4A2BC9C0A700418115 /* FacultyRecords.swift */; };
+		442ACF4D2BC9C0EC00418115 /* HODRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF4C2BC9C0EC00418115 /* HODRecords.swift */; };
+		442ACF502BC9C13100418115 /* FacultyDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF4F2BC9C13100418115 /* FacultyDetails.swift */; };
+		442ACF522BC9C15200418115 /* ViewCourses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF512BC9C15200418115 /* ViewCourses.swift */; };
+		442ACF542BC9C16E00418115 /* AssignCourses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF532BC9C16E00418115 /* AssignCourses.swift */; };
+		442ACF562BC9C18800418115 /* GridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF552BC9C18800418115 /* GridView.swift */; };
+		442ACF582BC9C1A600418115 /* AssignRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF572BC9C1A600418115 /* AssignRole.swift */; };
+		442ACF5C2BC9C1F500418115 /* DataCellRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF5B2BC9C1F500418115 /* DataCellRecords.swift */; };
+		442ACF5E2BC9C22600418115 /* Faculty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF5D2BC9C22600418115 /* Faculty.swift */; };
+		442ACF602BC9C24300418115 /* Courses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF5F2BC9C24300418115 /* Courses.swift */; };
+		442ACF622BC9C25700418115 /* ApprovedPapers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF612BC9C25700418115 /* ApprovedPapers.swift */; };
+		442ACF642BC9C27600418115 /* PrintedPapers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF632BC9C27600418115 /* PrintedPapers.swift */; };
+		442ACF682BC9C2F000418115 /* DirectorRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF672BC9C2F000418115 /* DirectorRecords.swift */; };
+		442ACF6A2BC9C31500418115 /* UploadedPapers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF692BC9C31500418115 /* UploadedPapers.swift */; };
+		442ACF6C2BC9C33300418115 /* PaperQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF6B2BC9C33300418115 /* PaperQuestions.swift */; };
+		442ACF6E2BC9C35600418115 /* ApprovePaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF6D2BC9C35600418115 /* ApprovePaper.swift */; };
+		442ACF712BC9C38800418115 /* DirectorWelcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF702BC9C38800418115 /* DirectorWelcome.swift */; };
+		442ACF732BC9C3A500418115 /* HODWelcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF722BC9C3A500418115 /* HODWelcome.swift */; };
+		442ACF752BC9C3BA00418115 /* FacultyWelcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF742BC9C3BA00418115 /* FacultyWelcome.swift */; };
+		442ACF772BC9C3D900418115 /* DataCellWelcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF762BC9C3D900418115 /* DataCellWelcome.swift */; };
+		442ACF792BC9C47800418115 /* SetCLOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF782BC9C47800418115 /* SetCLOs.swift */; };
+		442ACF7B2BC9C49600418115 /* Topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF7A2BC9C49600418115 /* Topics.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		442ACF1F2BC9BE1900418115 /* Dashboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dashboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		442ACF222BC9BE1900418115 /* DashboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardApp.swift; sourceTree = "<group>"; };
-		442ACF242BC9BE1900418115 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		442ACF262BC9BE1A00418115 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		442ACF292BC9BE1A00418115 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		442ACF302BC9BE7B00418115 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
+		442ACF332BC9BEDF00418115 /* DirectorLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectorLogin.swift; sourceTree = "<group>"; };
+		442ACF352BC9BEF200418115 /* HODLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HODLogin.swift; sourceTree = "<group>"; };
+		442ACF372BC9BF0100418115 /* FacultyLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacultyLogin.swift; sourceTree = "<group>"; };
+		442ACF392BC9BF1A00418115 /* DataCellLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCellLogin.swift; sourceTree = "<group>"; };
+		442ACF3C2BC9BFB600418115 /* ViewYourCourses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewYourCourses.swift; sourceTree = "<group>"; };
+		442ACF3E2BC9BFD900418115 /* CoveredTopics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoveredTopics.swift; sourceTree = "<group>"; };
+		442ACF402BC9BFF900418115 /* PaperStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaperStatus.swift; sourceTree = "<group>"; };
+		442ACF422BC9C01300418115 /* SetPaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetPaper.swift; sourceTree = "<group>"; };
+		442ACF442BC9C02700418115 /* ViewCLOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCLOs.swift; sourceTree = "<group>"; };
+		442ACF462BC9C04200418115 /* ViewTopics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewTopics.swift; sourceTree = "<group>"; };
+		442ACF4A2BC9C0A700418115 /* FacultyRecords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacultyRecords.swift; sourceTree = "<group>"; };
+		442ACF4C2BC9C0EC00418115 /* HODRecords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HODRecords.swift; sourceTree = "<group>"; };
+		442ACF4F2BC9C13100418115 /* FacultyDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacultyDetails.swift; sourceTree = "<group>"; };
+		442ACF512BC9C15200418115 /* ViewCourses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCourses.swift; sourceTree = "<group>"; };
+		442ACF532BC9C16E00418115 /* AssignCourses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignCourses.swift; sourceTree = "<group>"; };
+		442ACF552BC9C18800418115 /* GridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridView.swift; sourceTree = "<group>"; };
+		442ACF572BC9C1A600418115 /* AssignRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignRole.swift; sourceTree = "<group>"; };
+		442ACF5B2BC9C1F500418115 /* DataCellRecords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCellRecords.swift; sourceTree = "<group>"; };
+		442ACF5D2BC9C22600418115 /* Faculty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Faculty.swift; sourceTree = "<group>"; };
+		442ACF5F2BC9C24300418115 /* Courses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Courses.swift; sourceTree = "<group>"; };
+		442ACF612BC9C25700418115 /* ApprovedPapers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovedPapers.swift; sourceTree = "<group>"; };
+		442ACF632BC9C27600418115 /* PrintedPapers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintedPapers.swift; sourceTree = "<group>"; };
+		442ACF672BC9C2F000418115 /* DirectorRecords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectorRecords.swift; sourceTree = "<group>"; };
+		442ACF692BC9C31500418115 /* UploadedPapers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadedPapers.swift; sourceTree = "<group>"; };
+		442ACF6B2BC9C33300418115 /* PaperQuestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaperQuestions.swift; sourceTree = "<group>"; };
+		442ACF6D2BC9C35600418115 /* ApprovePaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApprovePaper.swift; sourceTree = "<group>"; };
+		442ACF702BC9C38800418115 /* DirectorWelcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectorWelcome.swift; sourceTree = "<group>"; };
+		442ACF722BC9C3A500418115 /* HODWelcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HODWelcome.swift; sourceTree = "<group>"; };
+		442ACF742BC9C3BA00418115 /* FacultyWelcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacultyWelcome.swift; sourceTree = "<group>"; };
+		442ACF762BC9C3D900418115 /* DataCellWelcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCellWelcome.swift; sourceTree = "<group>"; };
+		442ACF782BC9C47800418115 /* SetCLOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCLOs.swift; sourceTree = "<group>"; };
+		442ACF7A2BC9C49600418115 /* Topics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topics.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +115,14 @@
 		442ACF212BC9BE1900418115 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				442ACF6F2BC9C36F00418115 /* Welcome */,
+				442ACF652BC9C2C000418115 /* Director */,
+				442ACF592BC9C1CB00418115 /* DataCell */,
+				442ACF482BC9C06300418115 /* HOD */,
+				442ACF3B2BC9BF7F00418115 /* Faculty */,
+				442ACF322BC9BEA700418115 /* DashBoardLogin's */,
 				442ACF222BC9BE1900418115 /* DashboardApp.swift */,
-				442ACF242BC9BE1900418115 /* ContentView.swift */,
+				442ACF302BC9BE7B00418115 /* Dashboard.swift */,
 				442ACF262BC9BE1A00418115 /* Assets.xcassets */,
 				442ACF282BC9BE1A00418115 /* Preview Content */,
 			);
@@ -65,6 +135,112 @@
 				442ACF292BC9BE1A00418115 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		442ACF322BC9BEA700418115 /* DashBoardLogin's */ = {
+			isa = PBXGroup;
+			children = (
+				442ACF332BC9BEDF00418115 /* DirectorLogin.swift */,
+				442ACF352BC9BEF200418115 /* HODLogin.swift */,
+				442ACF372BC9BF0100418115 /* FacultyLogin.swift */,
+				442ACF392BC9BF1A00418115 /* DataCellLogin.swift */,
+			);
+			path = "DashBoardLogin's";
+			sourceTree = "<group>";
+		};
+		442ACF3B2BC9BF7F00418115 /* Faculty */ = {
+			isa = PBXGroup;
+			children = (
+				442ACF492BC9C08400418115 /* FacultyRecords */,
+				442ACF3C2BC9BFB600418115 /* ViewYourCourses.swift */,
+				442ACF3E2BC9BFD900418115 /* CoveredTopics.swift */,
+				442ACF402BC9BFF900418115 /* PaperStatus.swift */,
+				442ACF422BC9C01300418115 /* SetPaper.swift */,
+				442ACF442BC9C02700418115 /* ViewCLOs.swift */,
+				442ACF462BC9C04200418115 /* ViewTopics.swift */,
+				442ACF782BC9C47800418115 /* SetCLOs.swift */,
+				442ACF7A2BC9C49600418115 /* Topics.swift */,
+			);
+			path = Faculty;
+			sourceTree = "<group>";
+		};
+		442ACF482BC9C06300418115 /* HOD */ = {
+			isa = PBXGroup;
+			children = (
+				442ACF4E2BC9C0F400418115 /* HODRecords */,
+				442ACF4F2BC9C13100418115 /* FacultyDetails.swift */,
+				442ACF512BC9C15200418115 /* ViewCourses.swift */,
+				442ACF532BC9C16E00418115 /* AssignCourses.swift */,
+				442ACF552BC9C18800418115 /* GridView.swift */,
+				442ACF572BC9C1A600418115 /* AssignRole.swift */,
+			);
+			path = HOD;
+			sourceTree = "<group>";
+		};
+		442ACF492BC9C08400418115 /* FacultyRecords */ = {
+			isa = PBXGroup;
+			children = (
+				442ACF4A2BC9C0A700418115 /* FacultyRecords.swift */,
+			);
+			path = FacultyRecords;
+			sourceTree = "<group>";
+		};
+		442ACF4E2BC9C0F400418115 /* HODRecords */ = {
+			isa = PBXGroup;
+			children = (
+				442ACF4C2BC9C0EC00418115 /* HODRecords.swift */,
+			);
+			path = HODRecords;
+			sourceTree = "<group>";
+		};
+		442ACF592BC9C1CB00418115 /* DataCell */ = {
+			isa = PBXGroup;
+			children = (
+				442ACF5A2BC9C1D900418115 /* DataCellRecords */,
+				442ACF5D2BC9C22600418115 /* Faculty.swift */,
+				442ACF5F2BC9C24300418115 /* Courses.swift */,
+				442ACF612BC9C25700418115 /* ApprovedPapers.swift */,
+				442ACF632BC9C27600418115 /* PrintedPapers.swift */,
+			);
+			path = DataCell;
+			sourceTree = "<group>";
+		};
+		442ACF5A2BC9C1D900418115 /* DataCellRecords */ = {
+			isa = PBXGroup;
+			children = (
+				442ACF5B2BC9C1F500418115 /* DataCellRecords.swift */,
+			);
+			path = DataCellRecords;
+			sourceTree = "<group>";
+		};
+		442ACF652BC9C2C000418115 /* Director */ = {
+			isa = PBXGroup;
+			children = (
+				442ACF662BC9C2CF00418115 /* DirectorRecords */,
+				442ACF692BC9C31500418115 /* UploadedPapers.swift */,
+				442ACF6B2BC9C33300418115 /* PaperQuestions.swift */,
+				442ACF6D2BC9C35600418115 /* ApprovePaper.swift */,
+			);
+			path = Director;
+			sourceTree = "<group>";
+		};
+		442ACF662BC9C2CF00418115 /* DirectorRecords */ = {
+			isa = PBXGroup;
+			children = (
+				442ACF672BC9C2F000418115 /* DirectorRecords.swift */,
+			);
+			path = DirectorRecords;
+			sourceTree = "<group>";
+		};
+		442ACF6F2BC9C36F00418115 /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				442ACF702BC9C38800418115 /* DirectorWelcome.swift */,
+				442ACF722BC9C3A500418115 /* HODWelcome.swift */,
+				442ACF742BC9C3BA00418115 /* FacultyWelcome.swift */,
+				442ACF762BC9C3D900418115 /* DataCellWelcome.swift */,
+			);
+			path = Welcome;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +313,40 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				442ACF252BC9BE1900418115 /* ContentView.swift in Sources */,
+				442ACF752BC9C3BA00418115 /* FacultyWelcome.swift in Sources */,
+				442ACF582BC9C1A600418115 /* AssignRole.swift in Sources */,
+				442ACF472BC9C04200418115 /* ViewTopics.swift in Sources */,
+				442ACF7B2BC9C49600418115 /* Topics.swift in Sources */,
+				442ACF3F2BC9BFD900418115 /* CoveredTopics.swift in Sources */,
+				442ACF3D2BC9BFB600418115 /* ViewYourCourses.swift in Sources */,
+				442ACF4B2BC9C0A700418115 /* FacultyRecords.swift in Sources */,
+				442ACF4D2BC9C0EC00418115 /* HODRecords.swift in Sources */,
+				442ACF312BC9BE7B00418115 /* Dashboard.swift in Sources */,
+				442ACF682BC9C2F000418115 /* DirectorRecords.swift in Sources */,
+				442ACF502BC9C13100418115 /* FacultyDetails.swift in Sources */,
+				442ACF6C2BC9C33300418115 /* PaperQuestions.swift in Sources */,
+				442ACF382BC9BF0100418115 /* FacultyLogin.swift in Sources */,
+				442ACF412BC9BFF900418115 /* PaperStatus.swift in Sources */,
+				442ACF362BC9BEF200418115 /* HODLogin.swift in Sources */,
+				442ACF6A2BC9C31500418115 /* UploadedPapers.swift in Sources */,
+				442ACF622BC9C25700418115 /* ApprovedPapers.swift in Sources */,
+				442ACF342BC9BEDF00418115 /* DirectorLogin.swift in Sources */,
+				442ACF542BC9C16E00418115 /* AssignCourses.swift in Sources */,
+				442ACF522BC9C15200418115 /* ViewCourses.swift in Sources */,
+				442ACF6E2BC9C35600418115 /* ApprovePaper.swift in Sources */,
+				442ACF642BC9C27600418115 /* PrintedPapers.swift in Sources */,
+				442ACF732BC9C3A500418115 /* HODWelcome.swift in Sources */,
+				442ACF792BC9C47800418115 /* SetCLOs.swift in Sources */,
+				442ACF772BC9C3D900418115 /* DataCellWelcome.swift in Sources */,
+				442ACF602BC9C24300418115 /* Courses.swift in Sources */,
 				442ACF232BC9BE1900418115 /* DashboardApp.swift in Sources */,
+				442ACF3A2BC9BF1A00418115 /* DataCellLogin.swift in Sources */,
+				442ACF5C2BC9C1F500418115 /* DataCellRecords.swift in Sources */,
+				442ACF712BC9C38800418115 /* DirectorWelcome.swift in Sources */,
+				442ACF5E2BC9C22600418115 /* Faculty.swift in Sources */,
+				442ACF452BC9C02700418115 /* ViewCLOs.swift in Sources */,
+				442ACF562BC9C18800418115 /* GridView.swift in Sources */,
+				442ACF432BC9C01300418115 /* SetPaper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
