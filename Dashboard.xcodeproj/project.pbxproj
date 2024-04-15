@@ -115,12 +115,12 @@
 		442ACF212BC9BE1900418115 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				442ACF322BC9BEA700418115 /* DashBoardLogin's */,
 				442ACF6F2BC9C36F00418115 /* Welcome */,
 				442ACF652BC9C2C000418115 /* Director */,
 				442ACF592BC9C1CB00418115 /* DataCell */,
 				442ACF482BC9C06300418115 /* HOD */,
 				442ACF3B2BC9BF7F00418115 /* Faculty */,
-				442ACF322BC9BEA700418115 /* DashBoardLogin's */,
 				442ACF222BC9BE1900418115 /* DashboardApp.swift */,
 				442ACF302BC9BE7B00418115 /* Dashboard.swift */,
 				442ACF262BC9BE1A00418115 /* Assets.xcassets */,

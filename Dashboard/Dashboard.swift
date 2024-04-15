@@ -108,5 +108,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-
-// Table Bar Controller
