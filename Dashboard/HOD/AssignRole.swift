@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+
+
 struct AssignRole: View {
 
     @State private var selectedCourse: AllCourses?
@@ -77,6 +79,11 @@ struct AssignRole: View {
                                     }
                                 }
                                 .padding()
+                                .onAppear {
+                                    if assignedFaculty.role == "Senior" {
+                                        selectedFaculty = assignedFaculty
+                                    }
+                                }
                             }
                         }
                         .padding()
@@ -84,7 +91,6 @@ struct AssignRole: View {
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(Color.blue.opacity(0.6), lineWidth: 2)
                         )
-//                        .frame(maxWidth: .infinity)
                         .frame(height: 350)
                     }
                 } else {

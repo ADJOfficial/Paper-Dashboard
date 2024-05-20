@@ -20,6 +20,33 @@ class AssignedCoursesViewModel: ObservableObject {
     
     @Published var assignedCourses: [ACTF] = []
     
+//    func fetchAssignedCourses(facultyID: Int) {
+//        guard let url = URL(string: "http://localhost:2000/FacultyAssignedCourse?f_id=\(facultyID)") else {
+//            print("Invalid URL")
+//            return
+//        }
+//
+//        URLSession.shared.dataTask(with: url) { data, response, error in
+//            if let error = error {
+//                print("Error: \(error.localizedDescription)")
+//                return
+//            }
+//
+//            guard let data = data else {
+//                print("No data received")
+//                return
+//            }
+//
+//            do {
+//                let decodedData = try JSONDecoder().decode([ACTF].self, from: data)
+//                DispatchQueue.main.async {
+//                    self.assignedCourses = decodedData
+//                }
+//            } catch {
+//                print("Error decoding data: \(error.localizedDescription)")
+//            }
+//        }.resume()
+//    }
     func fetchAssignedCourses(facultyID: Int) {
         guard let url = URL(string: "http://localhost:2000/FacultyAssignedCourse?f_id=\(facultyID)") else {
             print("Invalid URL")
@@ -39,23 +66,19 @@ class AssignedCoursesViewModel: ObservableObject {
 
             if let httpResponse = response as? HTTPURLResponse {
                 print("Response status code: \(httpResponse.statusCode)")
+                if httpResponse.statusCode == 404 {
+                    print("No assigned courses found for faculty ID: \(facultyID)")
+                    return
+                }
             }
 
             do {
-                let json = try JSONSerialization.jsonObject(with: data, options: [])
-                if let jsonArray = json as? [[String: Any]] {
-                    if jsonArray.isEmpty {
-                        // Show server message if no assigned courses found for the faculty
-                        print("No assigned courses found for faculty ID: \(facultyID)")
-                    } else {
-                        let courses = try JSONDecoder().decode([ACTF].self, from: data)
-                        DispatchQueue.main.async {
-                            self.assignedCourses = courses
-                            print("Fetched \(courses.count) assigned courses for faculty ID: \(facultyID)")
-                        }
-                    }
-                } else {
-                    print("Invalid JSON format")
+                let decoder = JSONDecoder()
+                let courses = try decoder.decode([ACTF].self, from: data)
+                
+                DispatchQueue.main.async {
+                    self.assignedCourses = courses
+                    print("Fetched \(courses.count) assigned courses for faculty ID: \(facultyID)")
                 }
             } catch {
                 print("Error decoding data: \(error.localizedDescription)")
@@ -126,7 +149,7 @@ struct Courer: Codable  ,Hashable {
     let c_code: String
     let c_title: String
     let f_name: String
-//    var role: String
+    var role: String
     
 }
 

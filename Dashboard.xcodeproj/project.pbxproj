@@ -43,6 +43,7 @@
 		442ACF772BC9C3D900418115 /* DataCellWelcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF762BC9C3D900418115 /* DataCellWelcome.swift */; };
 		442ACF792BC9C47800418115 /* SetCLOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF782BC9C47800418115 /* SetCLOs.swift */; };
 		442ACF7B2BC9C49600418115 /* Topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF7A2BC9C49600418115 /* Topics.swift */; };
+		442BF27A2BF323AC00D5D118 /* TopicsCovered.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442BF2792BF323AC00D5D118 /* TopicsCovered.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +84,7 @@
 		442ACF762BC9C3D900418115 /* DataCellWelcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCellWelcome.swift; sourceTree = "<group>"; };
 		442ACF782BC9C47800418115 /* SetCLOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCLOs.swift; sourceTree = "<group>"; };
 		442ACF7A2BC9C49600418115 /* Topics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topics.swift; sourceTree = "<group>"; };
+		442BF2792BF323AC00D5D118 /* TopicsCovered.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsCovered.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 				442ACF462BC9C04200418115 /* ViewTopics.swift */,
 				442ACF782BC9C47800418115 /* SetCLOs.swift */,
 				442ACF7A2BC9C49600418115 /* Topics.swift */,
+				442BF2792BF323AC00D5D118 /* TopicsCovered.swift */,
 			);
 			path = Faculty;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				442ACF682BC9C2F000418115 /* DirectorRecords.swift in Sources */,
 				442ACF502BC9C13100418115 /* FacultyDetails.swift in Sources */,
 				442ACF6C2BC9C33300418115 /* PaperQuestions.swift in Sources */,
+				442BF27A2BF323AC00D5D118 /* TopicsCovered.swift in Sources */,
 				442ACF382BC9BF0100418115 /* FacultyLogin.swift in Sources */,
 				442ACF412BC9BFF900418115 /* PaperStatus.swift in Sources */,
 				442ACF362BC9BEF200418115 /* HODLogin.swift in Sources */,

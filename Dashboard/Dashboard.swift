@@ -66,6 +66,7 @@ struct Dashboard: View {
                     }
                     NavigationLink{
                         FacultyLogin(topic: Topic(t_id: 0, t_name: "", status: ""))
+                            .navigationBarBackButtonHidden(true)
                     }label: {
                         Text("Faculty")
                             .foregroundColor(.black)

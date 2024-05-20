@@ -12,16 +12,19 @@ struct ViewTopics: View { // Design 100% Ok
     var f_id: Int
     var c_id: Int
     var c_title: String
-//    var t_id: Int
-//    var t_name: String
-//    var t_name: String
+    var t_id: Int
+
+    @State private var selectedCLOs: [Int] = []
+    
     @State private var t_name = ""
-    @State private var isCLOChecked: [Bool] = [false, false, false, false]
+    @State private var selectedCLOText = ""
+    
     @State private var searchText = ""
     @StateObject private var topicViewModel = TopicViewModel()
+    @StateObject private var cloViewModel = CLOViewModel()
     
     @State private var showAlert = false
-    
+    @State private var showCloTextAlert = false
     var filteredTopics: [Topic] { // All Data Will Be Filter and show on Table
         if searchText.isEmpty {
             return topicViewModel.existing
@@ -75,8 +78,7 @@ struct ViewTopics: View { // Design 100% Ok
                     .padding()
                     .frame(maxWidth: .infinity , alignment: .center)
                     .foregroundColor(Color.white)
-                .accentColor(.green)
-//                Spacer()
+                    .accentColor(.green)
                 VStack{
                     Text("Topic")
                         .bold()
@@ -87,6 +89,7 @@ struct ViewTopics: View { // Design 100% Ok
                     TextField("Username" , text: $t_name)
                         .padding()
                         .background(Color.gray.opacity(1))
+                        .foregroundColor(Color.black)
                         .cornerRadius(8)
                         .padding(.horizontal)
                     Text("CLOs")
@@ -96,14 +99,44 @@ struct ViewTopics: View { // Design 100% Ok
                         .foregroundColor(Color.white)
                         .frame(maxWidth: .infinity , alignment: .center)
                     HStack {
-                        ForEach(0..<4) { index in
-                            Text("CLO:\(index + 1)")
-                            Image(systemName: self.isCLOChecked[index] ? "checkmark.square" : "square")
-                                .foregroundColor(self.isCLOChecked[index] ? .green : .white)
-                                .onTapGesture {
-                                    self.isCLOChecked[index].toggle()
+                        ForEach(cloViewModel.existing , id:\ .self) { cr in
+                            HStack{
+                                Button(action: {
+                                    if selectedCLOs.contains(cr.clo_id) {
+                                        selectedCLOs.removeAll { $0 == cr.clo_id }
+                                    } else {
+                                        selectedCLOs.append(cr.clo_id)
+                                    }
+                                }) {
+                                    HStack {
+                                        Image(systemName: selectedCLOs.contains(cr.clo_id) ? "checkmark.square" : "square")
+                                            .foregroundColor(selectedCLOs.contains(cr.clo_id) ? .green : .gray)
+                                        Text(cr.clo_code)
+                                            .font(.headline)
+                                            .foregroundColor(Color.white)
+                                            .gesture(TapGesture(count: 1)
+                                                .onEnded {
+                                                    selectedCLOText = cr.clo_text
+                                                    DispatchQueue.main.async {
+                                                        showCloTextAlert = true
+                                                    }
+                                                }
+                                            )
+                                    }
                                 }
+                                .padding(5)
+                            }
+                            if cloViewModel.existing.isEmpty {
+                                Text("No CLO Found For Course - \(c_title)")
+                                    .font(.headline)
+                                    .foregroundColor(.orange)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                            }
                         }
+                    }
+                    .onAppear {
+                        cloViewModel.getCourseCLO(courseID: c_id)
                     }
                     Image(systemName: "bolt.fill")
                         .padding()
@@ -113,16 +146,21 @@ struct ViewTopics: View { // Design 100% Ok
                         .frame(maxWidth: .infinity , alignment: .trailing)
                         .onTapGesture {
                             createTopic()
+                            for cloID in selectedCLOs {
+                                if let cloIDInt = cloID as? Int {
+                                    createCLO_Topic_map(cloIDs: [cloIDInt], topicID: t_id)
+                                }
+                            }
                         }
                     
                     SearchBar(text: $searchText)
                         .padding()
-                    
-                    
                 }
                 .font(.headline)
                 .foregroundColor(Color.white)
-                
+                .alert(isPresented: $showCloTextAlert) {
+                    Alert(title: Text("CLO Text"), message: Text(selectedCLOText), dismissButton: .default(Text("OK")))
+                }
                 VStack {
                     ScrollView{
                         ForEach(filteredTopics.indices , id:\ .self) { index in
@@ -158,7 +196,7 @@ struct ViewTopics: View { // Design 100% Ok
                             }
                             Divider()
                                 .background(Color.white)
-                            .padding(1)
+                                .padding(1)
                         }
                         if filteredTopics.isEmpty {
                             Text("No Topic Found For Course - \(c_title)")
@@ -182,7 +220,7 @@ struct ViewTopics: View { // Design 100% Ok
             .navigationBarItems(leading: backButton)
             .background(Image("fiii").resizable().ignoresSafeArea())
             .alert(isPresented: $showAlert) {
-                Alert(title: Text("Congratulations"), message: Text("SubTopic Created Successfully"), dismissButton: .default(Text("OK")))
+                Alert(title: Text("Congratulations"), message: Text("Topic Created Successfully"), dismissButton: .default(Text("OK")))
             }
         }
     }
@@ -200,31 +238,65 @@ struct ViewTopics: View { // Design 100% Ok
         guard let url = URL(string: "http://localhost:4000/addtopic") else {
             return
         }
-
+        
         let user = [
             "c_id": c_id,
             "t_name": t_name
         ] as [String : Any]
-
+        
         guard let jsonData = try? JSONSerialization.data(withJSONObject: user) else {
             return
         }
-
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
-
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data {
+                do {
+                    if let result = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                       let topicID = result["t_id"] as? Int {
+                        createCLO_Topic_map(cloIDs: selectedCLOs, topicID: topicID)
+                    }
+                    topicViewModel.getCourseTopic(courseID: c_id) // Refresh topics after creating a new one
+                    showAlert = true
+                    DispatchQueue.main.async {
+                        t_name = ""
+                    }
+                } catch {
+                    print("Error parsing JSON:", error)
+                }
+            } else if let error = error {
+                print("Error making request:", error)
+            }
+        }.resume()
+    }
+    func createCLO_Topic_map(cloIDs: [Int], topicID: Int) {
+        guard let url = URL(string: "http://localhost:4000/clotopicmap1") else {
+            return
+        }
+        
+        let parameters: [String: Any] = [
+            "clo_id": [cloIDs], // Assuming cloID is a single value
+            "t_id": topicID
+        ]
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: parameters) else {
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
                     let result = try JSONSerialization.jsonObject(with: data)
                     print("Result from server:", result)
-                    topicViewModel.getCourseTopic(courseID: c_id)// Refresh faculties after creating a new one
-                    showAlert = true
-                    DispatchQueue.main.async {
-                        t_name = ""
-                    }
                 } catch {
                     print("Error parsing JSON:", error)
                 }
@@ -266,7 +338,43 @@ struct ViewTopics: View { // Design 100% Ok
     }
 }
         
-
+//    func createTopic() {
+//        guard let url = URL(string: "http://localhost:4000/addtopic") else {
+//            return
+//        }
+//
+//        let user = [
+//            "c_id": c_id,
+//            "t_name": t_name
+//        ] as [String : Any]
+//
+//        guard let jsonData = try? JSONSerialization.data(withJSONObject: user) else {
+//            return
+//        }
+//
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.httpBody = jsonData
+//
+//        URLSession.shared.dataTask(with: request) { data, response, error in
+//            if let data = data {
+//                do {
+//                    let result = try JSONSerialization.jsonObject(with: data)
+//                    print("Result from server:", result)
+//                    topicViewModel.getCourseTopic(courseID: c_id)// Refresh faculties after creating a new one
+//                    showAlert = true
+//                    DispatchQueue.main.async {
+//                        t_name = ""
+//                    }
+//                } catch {
+//                    print("Error parsing JSON:", error)
+//                }
+//            } else if let error = error {
+//                print("Error making request:", error)
+//            }
+//        }.resume()
+//    }
 struct EditTopics: View { // Design 100% Ok
     
     var f_id: Int
@@ -787,6 +895,6 @@ struct EditSubTopics: View { // Design 100% Ok
 
 struct ViewTopics_Previews: PreviewProvider {
     static var previews: some View {
-        ViewTopics(f_id: 0, c_id: 1, c_title: "")
+        ViewTopics(f_id: 0, c_id: 1, c_title: "", t_id: 0)
     }
 }

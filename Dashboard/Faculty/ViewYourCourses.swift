@@ -139,7 +139,7 @@ struct Subject: View {
                 Spacer()
                 VStack{
                     NavigationLink{
-                        ViewTopics(f_id: f_id, c_id: c_id, c_title: c_title)
+                        ViewTopics(f_id: f_id, c_id: c_id, c_title: c_title , t_id: t_id)
                             .navigationBarBackButtonHidden(true)
                     } label: {
                         Text("View Topics")
@@ -152,7 +152,8 @@ struct Subject: View {
                     .padding(.all)
                     
                     NavigationLink{
-                        CoveredTopics(f_id: f_id, c_id: c_id, c_code: c_code, c_title: c_title)
+                        TopicsCovered(f_id: f_id, c_id: c_id, c_code: c_code, c_title: c_title)
+//                    f_id: f_id, c_id: c_id, c_code: c_code, c_title: c_title
                             .navigationBarBackButtonHidden(true)
                     } label: {
                         Text("Covered Topic")

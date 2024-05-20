@@ -93,89 +93,89 @@ class FeedbackViewModel: ObservableObject {
     }
 }
 
-//struct Topic: Hashable , Decodable  ,Encodable {
-//
-//    var t_id: Int
-//    var t_name: String
-//    var status: String
-//}
-//
-//class TopicViewModel: ObservableObject {
-//
-//    @Published var existing: [Topic] = []
-//
-//    func getCourseTopic(courseID: Int) {
-//        guard let url = URL(string: "http://localhost:4000/getcoursetopics/\(courseID)") else {
-//            print("Invalid URL")
-//            return
-//        }
-//
-//        URLSession.shared.dataTask(with: url) { (data, response, error) in
-//            if let error = error {
-//                print("Error: \(error.localizedDescription)")
-//                return
-//            }
-//
-//            guard let data = data else {
-//                print("No data received")
-//                return
-//            }
-//
-//            do {
-//                let decoder = JSONDecoder()
-//                let questions = try decoder.decode([Topic].self, from: data)
-//                DispatchQueue.main.async {
-//                    self.existing = questions
-//                }
-//            } catch {
-//                print("Error decoding data: \(error.localizedDescription)")
-//            }
-//        }
-//        .resume()
-//    }
-//}
-//
-//struct SubTopic: Hashable , Decodable  ,Encodable {
-//
-//    var st_id: Int
-//    var st_name: String
-//    var status: String
-//}
-//
-//class SubTopicViewModel: ObservableObject {
-//
-//    @Published var existing: [SubTopic] = []
-//
-//    func getTopicSubTopic(topicID: Int) {
-//        guard let url = URL(string: "http://localhost:4000/getsubtopic/\(topicID)") else {
-//            print("Invalid URL")
-//            return
-//        }
-//
-//        URLSession.shared.dataTask(with: url) { (data, response, error) in
-//            if let error = error {
-//                print("Error: \(error.localizedDescription)")
-//                return
-//            }
-//
-//            guard let data = data else {
-//                print("No data received")
-//                return
-//            }
-//
-//            do {
-//                let decoder = JSONDecoder()
-//                let questions = try decoder.decode([SubTopic].self, from: data)
-//                DispatchQueue.main.async {
-//                    self.existing = questions
-//                }
-//            } catch {
-//                print("Error decoding data: \(error.localizedDescription)")
-//            }
-//        }
-//        .resume()
-//    }
-//}
+struct Topic: Hashable , Decodable  ,Encodable {
+
+    var t_id: Int
+    var t_name: String
+    var status: String
+}
+
+class TopicViewModel: ObservableObject {
+
+    @Published var existing: [Topic] = []
+
+    func getCourseTopic(courseID: Int) {
+        guard let url = URL(string: "http://localhost:4000/getcoursetopics/\(courseID)") else {
+            print("Invalid URL")
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+
+            do {
+                let decoder = JSONDecoder()
+                let questions = try decoder.decode([Topic].self, from: data)
+                DispatchQueue.main.async {
+                    self.existing = questions
+                }
+            } catch {
+                print("Error decoding data: \(error.localizedDescription)")
+            }
+        }
+        .resume()
+    }
+}
+
+struct SubTopic: Hashable , Decodable  ,Encodable {
+
+    var st_id: Int
+    var st_name: String
+    var status: String
+}
+
+class SubTopicViewModel: ObservableObject {
+
+    @Published var existing: [SubTopic] = []
+
+    func getTopicSubTopic(topicID: Int) {
+        guard let url = URL(string: "http://localhost:4000/getsubtopic/\(topicID)") else {
+            print("Invalid URL")
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+
+            do {
+                let decoder = JSONDecoder()
+                let questions = try decoder.decode([SubTopic].self, from: data)
+                DispatchQueue.main.async {
+                    self.existing = questions
+                }
+            } catch {
+                print("Error decoding data: \(error.localizedDescription)")
+            }
+        }
+        .resume()
+    }
+}
 
 struct CoveredTopic: Hashable , Decodable  ,Encodable {
     

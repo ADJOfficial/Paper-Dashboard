@@ -425,7 +425,7 @@ struct StartMakingPaper: View {
     
     @State private var q_marks = ""
     @State private var selectedDifficulty = 0
-    var options = ["EASY" , "HARD" , "MEDIUM"]
+    var options = ["Easy" , "Hard" , "Medium"]
    
 
     @State private var selectedClo: Int?
@@ -449,42 +449,44 @@ struct StartMakingPaper: View {
                 .font(.largeTitle)
                 .foregroundColor(Color.white)
 //            Spacer()
-            HStack{
-                Image(systemName: "mail.fill")
+            HStack {
+                Image("u")
+                    .resizable()
                     .font(.largeTitle)
                     .foregroundColor(Color.green)
-                Text("Barani Institute of Information Technology\n         PMAS Arid Agriculture University\n                     Rawalpindi Pakistan\n        Fall 2024: Mid Term Examination")
+                Text("Barani Institute of Information Technology\nPMAS Arid Agriculture University\nRawalpindi Pakistan\nFall 2024: Mid Term Examination")
                     .foregroundColor(Color.white)
-                Image(systemName: "mail.fill")
-                    .font(.largeTitle)
+                    .multilineTextAlignment(.center)
+                    .frame(width: 260 , height: 110)
+                Image("u")
+                    .resizable()
                     .foregroundColor(Color.green)
+
             }
             ScrollView{
-                HStack{
-                    VStack{
+                VStack{
+                    HStack{
                         Text("Course Title: \(c_title)")
                             .bold()
                             .padding(.all,1)
                             .frame(maxWidth: .infinity , alignment: .leading)
-                        Text("Date of Exam: \(exam_date)")
-                            .bold()
-                            .padding(.all,1)
-                            .frame(maxWidth: .infinity , alignment: .leading)
-                        Text("Degree Program: \(degree)")
-                            .bold()
-                            .padding(.all,1)
-                            .frame(maxWidth: .infinity , alignment: .leading)
-                        Text("Teacher Name: \(f_name)")
-                            .bold()
-                            .padding(.all,1)
-                            .frame(maxWidth: .infinity , alignment: .leading)
-                    }
-                    VStack{
                         Text("Course Code: \(c_code)")
                             .bold()
                             .padding(.all,1)
                             .frame(maxWidth: .infinity , alignment: .leading)
+                    }
+                    HStack{
+                        Text("Date of Exam: \(exam_date)")
+                            .bold()
+                            .padding(.all,1)
+                            .frame(maxWidth: .infinity , alignment: .leading)
                         Text("Duration: \(duration)")
+                            .bold()
+                            .padding(.all,1)
+                            .frame(maxWidth: .infinity , alignment: .leading)
+                    }
+                    HStack{
+                        Text("Degree Program: \(degree)")
                             .bold()
                             .padding(.all,1)
                             .frame(maxWidth: .infinity , alignment: .leading)
@@ -494,6 +496,10 @@ struct StartMakingPaper: View {
                             .frame(maxWidth: .infinity , alignment: .leading)
                     }
                 }
+                Text("Teacher Name: \(f_name)")
+                    .bold()
+                    .padding(.all,1)
+                    .frame(maxWidth: .infinity , alignment: .center)
             }
             .padding()
             .frame(height: 150)
@@ -632,7 +638,7 @@ struct StartMakingPaper: View {
                             .stroke(Color.green.opacity(0.5), lineWidth: 2)
                     )
                     .onAppear{
-                        questionViewModel.getPaperQuestions(paperID: p_id)
+                        questionViewModel.getPaperQuestions(paperID: 1)
                     }
                 }
                 .onAppear{
@@ -641,7 +647,6 @@ struct StartMakingPaper: View {
                 .onAppear{
                     cloViewModel.getCourseCLO(courseID: c_id)
                 }
-//            Spacer()
         }
         .background(Image("fiii").resizable().ignoresSafeArea())
         .sheet(isPresented: $isShowingImagePicker) {
