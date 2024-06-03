@@ -24,7 +24,8 @@ struct PaperQuestions: View {
     var duration: Int
     var t_marks: Int
     
-    
+    @State private var showPopover = false
+    @State private var popoverContent = ""
     @State private var q_image: UIImage?
     
     @State private var selectedCLOText: String = ""
@@ -184,11 +185,32 @@ struct PaperQuestions: View {
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                     }
-                                    Text("[ \(cr.t_name) , \(cr.q_difficulty) , \(cr.q_marks) , \(cr.clo_code) ]")
-                                        .font(.title3)
-                                        .padding(.horizontal)
-                                        .foregroundColor(Color.white)
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                    VStack{
+                                        Text("[ \(cr.q_difficulty) , \(cr.q_marks) , \(cr.t_name) , \(cr.clo_code) ]")
+                                            .foregroundColor(Color.yellow)
+                                            .frame(maxWidth: .infinity, alignment: .trailing)
+                                            .onTapGesture {
+                                                // Toggle showPopover to true
+                                                showPopover.toggle()
+                                            }
+                                            .overlay(
+                                                Group {
+                                                    if showPopover {
+                                                        VStack {
+                                                            Text("\(cr.clo_code) : \(cr.clo_text)")
+                                                                .padding()
+                                                                .foregroundColor(Color.black)
+                                                                .background(Color.gray.opacity(1))
+                                                                .cornerRadius(10)
+                                                        }
+                                                        .onTapGesture {
+                                                            // Toggle showPopover to false when tapped outside the popover
+                                                            showPopover.toggle()
+                                                        }
+                                                    }
+                                                }
+                                            )
+                                    }
                                 }
                                 HStack {
                                     
@@ -551,9 +573,9 @@ struct PaperTopic: View { // For Radio Button
                 .padding(.horizontal)
                 .foregroundColor(Color.white)
                 .frame(maxWidth: .infinity , alignment: .leading)
-//
-//            SearchBar(text: $searchText)
-//                .padding()
+
+            SearchBar(text: $searchText)
+                .padding()
             Text("Questions Topics")
                 .bold()
                 .font(.title2)
@@ -605,19 +627,25 @@ struct PaperTopic: View { // For Radio Button
                 ScrollView{
                     ForEach(cloCodes.indices , id:\ .self) { index in
                         let cr = cloCodes[index]
-                        HStack{
-                            Text(cr.0)
-                                .font(.headline)
-                                .foregroundColor(Color.white)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Text(cr.1)
-                                .bold()
+                        VStack{
+                            Text("Question # 0\(index + 1)")
                                 .font(.headline)
                                 .foregroundColor(Color.orange)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            HStack{
+                                Text(cr.0)
+                                    .font(.headline)
+                                    .foregroundColor(Color.white)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Text(cr.1)
+                                    .bold()
+                                    .font(.headline)
+                                    .foregroundColor(Color.orange)
+                            }
+                            Divider()
+                                .background(Color.white)
+                                .padding(1)
                         }
-                        Divider()
-                            .background(Color.white)
-                        .padding(1)
                     }
                     if cloCodes.isEmpty {
                         Text("No CLO Found For This Course Paper - \(c_title)")
@@ -700,7 +728,7 @@ struct AdditionalQuestions: View { // For Radio Button
                                     .foregroundColor(Color.white)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 HStack{
-                                    Text("[ \(cr.t_name) , \(cr.q_difficulty) , \(cr.q_marks) , \(cr.clo_code) ]")
+                                    Text("[ \(cr.q_difficulty) , \(cr.q_marks) , \(cr.t_name) , \(cr.clo_code) ]")
                                         .font(.title3)
                                         .padding(.horizontal)
                                         .foregroundColor(Color.white)

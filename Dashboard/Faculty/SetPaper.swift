@@ -330,13 +330,23 @@ struct SetPaper: View {
                 }
                 
             }
+            .navigationBarItems(leading: backButton)
             .background(Image("fiii").resizable().ignoresSafeArea())
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Paper Header Created"), message: Text("Click on Arrow Button To Start Making Paper Questions"), dismissButton: .default(Text("OK")))
             }
         }
     }
-    
+    @Environment(\.presentationMode) var presentationMode
+    private var backButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundColor(.blue)
+                .imageScale(.large)
+        }
+    }
     func createPaper() {
         
         guard let url = URL(string: "http://localhost:4000/createpaper") else {
@@ -428,7 +438,7 @@ struct StartMakingPaper: View {
     var options = ["Easy" , "Hard" , "Medium"]
    
 
-    @State private var selectedClo: Int?
+//    @State private var selectedClo: Int?
     @State private var selectedTopic: Int?
     
     @State private var selectedImage: UIImage?
@@ -441,6 +451,8 @@ struct StartMakingPaper: View {
     
     @StateObject private var  topicViewModel = TopicViewModel()
     @StateObject private var  cloViewModel = CLOViewModel()
+    @StateObject private var  topiccloViewModel = TopicCLOViewModel()
+    
     
     var body: some View {
         VStack{
@@ -515,21 +527,21 @@ struct StartMakingPaper: View {
                             .foregroundColor(Color.white)
                             .padding(.horizontal)
                             .frame(maxWidth: .infinity , alignment: .leading)
-                        Text("CLO :")
-                            .foregroundColor(Color.white)
-                        Picker(selection: $selectedClo, label: Text("")) {
-                            Text("CLOs").tag(nil as Int?)
-                            ForEach(cloViewModel.existing, id: \.clo_id) { clo in
-                                Text(clo.clo_text)
-                                    .tag(clo.clo_id as Int?)
-                            }
-                        }
-                        .accentColor(Color.green)
-                        .onChange(of: (selectedClo)) { selectedCloID in
-                            if let selectedCLOID = selectedCloID {
-                                print("Selected CLO ID: \(selectedCLOID)")
-                            }
-                        }
+//                        Text("CLO :")
+//                            .foregroundColor(Color.white)
+//                        Picker(selection: $selectedClo, label: Text("")) {
+//                            Text("CLOs").tag(nil as Int?)
+//                            ForEach(cloViewModel.existing, id: \.clo_id) { clo in
+//                                Text(clo.clo_text)
+//                                    .tag(clo.clo_id as Int?)
+//                            }
+//                        }
+//                        .accentColor(Color.green)
+//                        .onChange(of: (selectedClo)) { selectedCloID in
+//                            if let selectedCLOID = selectedCloID {
+//                                print("Selected CLO ID: \(selectedCLOID)")
+//                            }
+//                        }
                     }
                     TextField("Type Question", text: $questions)
                         .padding()
@@ -563,6 +575,10 @@ struct StartMakingPaper: View {
                         .onChange(of: (selectedTopic)) { selectedTopicID in
                             if let selectedTopicID = selectedTopicID {
                                 print("Selected topic ID: \(selectedTopicID)")
+                                topiccloViewModel.getTopicCLO(topicID: selectedTopicID)
+                                ForEach(topiccloViewModel.topicCLO, id: \.self) { clo in
+                                    Text(clo.clo_code)
+                                }
                             }
                         }
                     }
@@ -594,13 +610,18 @@ struct StartMakingPaper: View {
                             .frame(width: 80)
                             .padding(.horizontal)
                         Spacer()
-                        Image(systemName: "bolt.fill")
-                            .font(.largeTitle)
-                            .foregroundColor(Color.green)
-                            .onTapGesture {
-                                createQuestion()
-                                showAlert
-                            }
+                        Button("Create"){
+                            createQuestion()
+                            showAlert
+                        }
+                            .bold()
+                            .padding()
+                            .foregroundColor(.black)
+                            .background(Color.green)
+                            .cornerRadius(8)
+                            .frame(width: 100)
+//                            .padding(.horizontal)
+                            .frame(alignment: .trailing)
                         Spacer()
                     }
                     Spacer()
@@ -617,15 +638,20 @@ struct StartMakingPaper: View {
                                         .font(.headline)
                                         .foregroundColor(Color.white)
                                         .frame(maxWidth: .infinity , alignment: .leading)
-                                    Text("[ \(cr.q_difficulty) , \(cr.q_marks) , \(cr.clo_code) ]")
-                                        .font(.title3)
-                                        .padding(.horizontal)
+                                    Text("[ \(cr.q_difficulty) , \(cr.q_marks) , \(cr.t_name) , \(cr.clo_code) ]")
                                         .foregroundColor(Color.yellow)
                                         .frame(maxWidth: .infinity, alignment: .trailing)
                                 }
                                 Divider()
                                     .background(Color.white)
                                 .padding(1)
+                            }
+                            if questionViewModel.uploadedQuestions.isEmpty {
+                                Text("No Questions Found For Course - \(c_title)")
+                                    .font(.headline)
+                                    .foregroundColor(.orange)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
                             }
                         }
                         .padding()
@@ -648,6 +674,7 @@ struct StartMakingPaper: View {
                     cloViewModel.getCourseCLO(courseID: c_id)
                 }
         }
+        .navigationBarItems(leading: backButton)
         .background(Image("fiii").resizable().ignoresSafeArea())
         .sheet(isPresented: $isShowingImagePicker) {
             ImagePickerView(result: handleImagePickerResult)
@@ -656,7 +683,16 @@ struct StartMakingPaper: View {
             Alert(title: Text("Question Created Successfully"), message: Text("Click on Plus Button Below To Add More Question For This Paper if You Want..."), dismissButton: .default(Text("OK")))
         }
     }
-    
+    @Environment(\.presentationMode) var presentationMode
+    private var backButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundColor(.blue)
+                .imageScale(.large)
+        }
+    }
     func createQuestion() {
         guard let url = URL(string: "http://localhost:4000/ifimageornot") else {
             return
@@ -673,17 +709,17 @@ struct StartMakingPaper: View {
             print("Selected topic not found")
             return
         }
-        guard selectedClo != 0 else {
-            print("No CLO selected")
-            return
-        }
-
-        let selectedCLOID = selectedClo
-
-        guard let selectClo = cloViewModel.existing.first(where: { Int($0.clo_id) == selectedCLOID }) else {
-            print("Selected CLO not found")
-            return
-        }
+//        guard selectedClo != 0 else {
+//            print("No CLO selected")
+//            return
+//        }
+//
+//        let selectedCLOID = selectedClo
+//
+//        guard let selectClo = cloViewModel.existing.first(where: { Int($0.clo_id) == selectedCLOID }) else {
+//            print("Selected CLO not found")
+//            return
+//        }
         
         let question = [
             "q_text": questions,
@@ -693,7 +729,7 @@ struct StartMakingPaper: View {
             "p_id": p_id,
             "f_id": f_id,
             "c_id": c_id,
-            "clo_id": selectClo.clo_id
+//            "clo_id": selectClo.clo_id
         ] as [String: Any]
         
         let boundary = UUID().uuidString
@@ -738,7 +774,7 @@ struct StartMakingPaper: View {
                         selectedDifficulty = 0
                         q_marks = ""
                         selectedImage = nil
-                        selectedClo = nil
+//                        selectedClo = nil
                         selectedTopic = nil
                     }
                     

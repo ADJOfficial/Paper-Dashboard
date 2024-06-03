@@ -57,6 +57,18 @@ struct ViewCLOs: View { // Design 100% Ok
         }
     }
     
+    func getStatusColor(status: String) -> Color {
+        switch status {
+        case "Rejected":
+            return .red
+        case "Approved":
+            return .green
+        case "Pending":
+            return .yellow
+        default:
+            return .white
+        }
+    }
     
     var body: some View { // Get All Data From Node MongoDB : Pending
         
@@ -102,16 +114,17 @@ struct ViewCLOs: View { // Design 100% Ok
                         .cornerRadius(8)
                         .padding(.horizontal)
                     
-                    Image(systemName: "bolt.fill")
+                    Button("Add"){
+                        createCLO()
+                        showAlert
+                    }
+                        .bold()
                         .padding()
-                        .font(.largeTitle)
-                        .foregroundColor(Color.green)
+                        .foregroundColor(.black)
+                        .background(Color.green)
+                        .cornerRadius(8)
                         .padding(.horizontal)
                         .frame(maxWidth: .infinity , alignment: .trailing)
-                        .onTapGesture {
-                            createCLO()
-                            showAlert
-                        }
                 }
                 SearchBar(text: $searchText)
                     .padding()
@@ -120,26 +133,34 @@ struct ViewCLOs: View { // Design 100% Ok
                     ScrollView{
                         ForEach(filteredClo.indices , id:\ .self) { index in
                             let cr = filteredClo[index]
-                            HStack{
-                                Text(cr.clo_text)
+                            VStack{
+                                Text(cr.status)
+                                    .padding(1)
                                     .font(.headline)
-                                    .foregroundColor(Color.white)
-                                    .frame(maxWidth: .infinity , alignment: .leading)
-                                NavigationLink{
-                                    EditCLO(f_id: f_id, c_id: c_id, c_title: c_title, clo: cr)
-//                                        .navigationBarBackButtonHidden(true)
-                                }label: {
-                                    Image(systemName: "square.and.pencil.circle")
-                                        .font(.title)
-                                        .foregroundColor(Color.orange)
-                                        .frame(maxWidth: .infinity , alignment: .trailing)
-                                }
-                                Image(systemName: isCloEnabled(index) ? "checkmark.circle.fill" : "nosign")
-                                    .font(.title)
-                                    .foregroundColor(isCloEnabled(index) ? .green : .red)
-                                    .onTapGesture {
-                                        toggleCloStatus(index)
+                                    .foregroundColor(getStatusColor(status: cr.status))
+                                    .frame(maxWidth: .infinity , alignment: .center)
+                                HStack{
+                                    Text(cr.clo_text)
+                                        .font(.headline)
+                                        .foregroundColor(Color.white)
+                                        .frame(maxWidth: .infinity , alignment: .leading)
+                                    
+                                    NavigationLink{
+                                        EditCLO(f_id: f_id, c_id: c_id, c_title: c_title, clo: cr)
+                                        //                                        .navigationBarBackButtonHidden(true)
+                                    }label: {
+                                        Image(systemName: "square.and.pencil.circle")
+                                            .font(.title)
+                                            .foregroundColor(Color.orange)
+                                            .frame(alignment: .trailing)
                                     }
+                                    Image(systemName: isCloEnabled(index) ? "checkmark.circle.fill" : "nosign")
+                                        .font(.title)
+                                        .foregroundColor(isCloEnabled(index) ? .green : .red)
+                                        .onTapGesture {
+                                            toggleCloStatus(index)
+                                        }
+                                }
                             }
                             Divider()
                                 .background(Color.white)
@@ -165,13 +186,23 @@ struct ViewCLOs: View { // Design 100% Ok
                 }
                 
             }
+            .navigationBarItems(leading: backButton)
             .background(Image("fiii").resizable().ignoresSafeArea())
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Congratulations"), message: Text("CLO Created Successfully"), dismissButton: .default(Text("OK")))
             }
         }
     }
-
+    @Environment(\.presentationMode) var presentationMode
+    private var backButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundColor(.blue)
+                .imageScale(.large)
+        }
+    }
     func createCLO() {
         guard let url = URL(string: "http://localhost:4000/addCLO") else {
             return
@@ -320,10 +351,21 @@ struct EditCLO: View { // Design 100% Ok
                 .cornerRadius(8)
                 .padding(.all)
             }
+            .navigationBarItems(leading: backButton)
             .background(Image("fiii").resizable().ignoresSafeArea())
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Congratulations"), message: Text("CLO Updated Successfully"), dismissButton: .default(Text("OK")))
             }
+        }
+    }
+    @Environment(\.presentationMode) var presentationMode
+    private var backButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundColor(.blue)
+                .imageScale(.large)
         }
     }
     func updateClo() {

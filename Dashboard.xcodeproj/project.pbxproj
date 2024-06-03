@@ -43,7 +43,9 @@
 		442ACF772BC9C3D900418115 /* DataCellWelcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF762BC9C3D900418115 /* DataCellWelcome.swift */; };
 		442ACF792BC9C47800418115 /* SetCLOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF782BC9C47800418115 /* SetCLOs.swift */; };
 		442ACF7B2BC9C49600418115 /* Topics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442ACF7A2BC9C49600418115 /* Topics.swift */; };
-		442BF27A2BF323AC00D5D118 /* TopicsCovered.swift in Sources */ = {isa = PBXBuildFile; fileRef = 442BF2792BF323AC00D5D118 /* TopicsCovered.swift */; };
+		4472BDFF2C0C5466000D22B8 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4472BDFE2C0C5466000D22B8 /* Session.swift */; };
+		4472BE032C0C8375000D22B8 /* Difficulty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4472BE022C0C8375000D22B8 /* Difficulty.swift */; };
+		4472BE072C0CC9D5000D22B8 /* CourseGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4472BE062C0CC9D5000D22B8 /* CourseGridView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,7 +86,9 @@
 		442ACF762BC9C3D900418115 /* DataCellWelcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCellWelcome.swift; sourceTree = "<group>"; };
 		442ACF782BC9C47800418115 /* SetCLOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCLOs.swift; sourceTree = "<group>"; };
 		442ACF7A2BC9C49600418115 /* Topics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Topics.swift; sourceTree = "<group>"; };
-		442BF2792BF323AC00D5D118 /* TopicsCovered.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsCovered.swift; sourceTree = "<group>"; };
+		4472BDFE2C0C5466000D22B8 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		4472BE022C0C8375000D22B8 /* Difficulty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Difficulty.swift; sourceTree = "<group>"; };
+		4472BE062C0CC9D5000D22B8 /* CourseGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseGridView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,7 +166,7 @@
 				442ACF462BC9C04200418115 /* ViewTopics.swift */,
 				442ACF782BC9C47800418115 /* SetCLOs.swift */,
 				442ACF7A2BC9C49600418115 /* Topics.swift */,
-				442BF2792BF323AC00D5D118 /* TopicsCovered.swift */,
+				4472BE062C0CC9D5000D22B8 /* CourseGridView.swift */,
 			);
 			path = Faculty;
 			sourceTree = "<group>";
@@ -176,6 +180,8 @@
 				442ACF532BC9C16E00418115 /* AssignCourses.swift */,
 				442ACF552BC9C18800418115 /* GridView.swift */,
 				442ACF572BC9C1A600418115 /* AssignRole.swift */,
+				4472BDFE2C0C5466000D22B8 /* Session.swift */,
+				4472BE022C0C8375000D22B8 /* Difficulty.swift */,
 			);
 			path = HOD;
 			sourceTree = "<group>";
@@ -324,11 +330,12 @@
 				442ACF3D2BC9BFB600418115 /* ViewYourCourses.swift in Sources */,
 				442ACF4B2BC9C0A700418115 /* FacultyRecords.swift in Sources */,
 				442ACF4D2BC9C0EC00418115 /* HODRecords.swift in Sources */,
+				4472BDFF2C0C5466000D22B8 /* Session.swift in Sources */,
 				442ACF312BC9BE7B00418115 /* Dashboard.swift in Sources */,
 				442ACF682BC9C2F000418115 /* DirectorRecords.swift in Sources */,
 				442ACF502BC9C13100418115 /* FacultyDetails.swift in Sources */,
+				4472BE032C0C8375000D22B8 /* Difficulty.swift in Sources */,
 				442ACF6C2BC9C33300418115 /* PaperQuestions.swift in Sources */,
-				442BF27A2BF323AC00D5D118 /* TopicsCovered.swift in Sources */,
 				442ACF382BC9BF0100418115 /* FacultyLogin.swift in Sources */,
 				442ACF412BC9BFF900418115 /* PaperStatus.swift in Sources */,
 				442ACF362BC9BEF200418115 /* HODLogin.swift in Sources */,
@@ -349,6 +356,7 @@
 				442ACF712BC9C38800418115 /* DirectorWelcome.swift in Sources */,
 				442ACF5E2BC9C22600418115 /* Faculty.swift in Sources */,
 				442ACF452BC9C02700418115 /* ViewCLOs.swift in Sources */,
+				4472BE072C0CC9D5000D22B8 /* CourseGridView.swift in Sources */,
 				442ACF562BC9C18800418115 /* GridView.swift in Sources */,
 				442ACF432BC9C01300418115 /* SetPaper.swift in Sources */,
 			);

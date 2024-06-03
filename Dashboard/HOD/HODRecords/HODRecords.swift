@@ -239,3 +239,134 @@ class CoViewModel: ObservableObject {
         }.resume()
     }
 }
+
+
+struct GridViewHeader: Hashable , Decodable  ,Encodable {
+
+        var name: String
+        var weightage: Int
+    
+}
+
+class GridViewHeaderViewModel: ObservableObject {
+    
+    @Published var gvh: [GridViewHeader] = []
+    
+    func fetchExistingGrid() {
+        guard let url = URL(string: "http://localhost:2000/gridviewheader") else {
+            print("Invalid URL")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            if let error = error {
+                print("Error fetching data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let data = data else {
+                print("No data returned")
+                return
+            }
+            
+            do {
+                let grid = try JSONDecoder().decode([GridViewHeader].self, from: data)
+                DispatchQueue.main.async {
+                    self?.gvh = grid
+                    print("Fetched \(grid.count) Headers")
+                }
+            } catch {
+                print("Error decoding data: \(error.localizedDescription)")
+            }
+        }
+        task.resume()
+    }
+}
+struct GridViewWeightage: Hashable , Decodable  ,Encodable {
+   
+    var clo_code: String
+    var weightage1: Int
+    var weightage2: Int
+    var weightage3: Int
+    var weightage4: Int
+    
+}
+class GridViewWeightageViewModel: ObservableObject {
+    
+    @Published var gvh: [GridViewWeightage] = []
+    
+    func fetchExistingGridWeightage() {
+        guard let url = URL(string: "http://localhost:2000/gridviewweightage") else {
+            print("Invalid URL")
+            return
+        }
+
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            if let error = error {
+                print("Error fetching data: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = data else {
+                print("No data returned")
+                return
+            }
+
+            do {
+                let grid = try JSONDecoder().decode([GridViewWeightage].self, from: data)
+                DispatchQueue.main.async {
+                    self?.gvh = grid
+                    print("Fetched \(grid.count) Headers")
+                }
+            } catch {
+                print("Error decoding !!!!data: \(error.localizedDescription)")
+            }
+        }
+        task.resume()
+    }
+}
+
+
+struct ManageSession: Hashable , Decodable  ,Encodable {
+
+    var s_id: Int
+    var s_name: String
+    var s_year: Int
+    var status: Int
+    
+}
+
+class SessionViewModel: ObservableObject {
+    
+    @Published var session: [ManageSession] = []
+    
+    func fetchExistingSession() {
+        guard let url = URL(string: "http://localhost:2000/getsession") else {
+            print("Invalid URL")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            if let error = error {
+                print("Error fetching data: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let data = data else {
+                print("No data returned")
+                return
+            }
+            
+            do {
+                let s = try JSONDecoder().decode([ManageSession].self, from: data)
+                DispatchQueue.main.async {
+                    self?.session = s
+                    print("Fetched \(s.count) Session")
+                }
+            } catch {
+                print("Error decoding data: \(error.localizedDescription)")
+            }
+        }
+        task.resume()
+    }
+}

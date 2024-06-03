@@ -152,8 +152,7 @@ struct Subject: View {
                     .padding(.all)
                     
                     NavigationLink{
-                        TopicsCovered(f_id: f_id, c_id: c_id, c_code: c_code, c_title: c_title)
-//                    f_id: f_id, c_id: c_id, c_code: c_code, c_title: c_title
+                        CoveredTopics(f_id: f_id, c_id: c_id, c_code: c_code, c_title: c_title, subtopics: SubTopic(t_id: 0, st_id: 0, st_name: "", status: ""))
                             .navigationBarBackButtonHidden(true)
                     } label: {
                         Text("Covered Topic")
@@ -196,6 +195,19 @@ struct Subject: View {
                             .navigationBarBackButtonHidden(true)
                     } label: {
                         Text("Paper Status")
+                            .underline()
+                    }
+                    .bold()
+                    .padding()
+                    .font(.title2)
+                    .foregroundColor(.green)
+                    .padding(.all)
+                    
+                    NavigationLink{
+                        CourseGridView(c_id: c_id, c_title: c_title, c_code: c_code)
+                            .navigationBarBackButtonHidden(true)
+                    } label: {
+                        Text("Grid View")
                             .underline()
                     }
                     .bold()

@@ -114,7 +114,18 @@ struct PaperStatus: View { // Design 100% Ok
                 }
                 Spacer()
             }
+            .navigationBarItems(leading: backButton)
             .background(Image("fiii").resizable().ignoresSafeArea())
+        }
+    }
+    @Environment(\.presentationMode) var presentationMode
+    private var backButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundColor(.blue)
+                .imageScale(.large)
         }
     }
 }

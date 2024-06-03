@@ -138,20 +138,21 @@ struct ViewTopics: View { // Design 100% Ok
                     .onAppear {
                         cloViewModel.getCourseCLO(courseID: c_id)
                     }
-                    Image(systemName: "bolt.fill")
-                        .padding()
-                        .font(.largeTitle)
-                        .foregroundColor(Color.green)
-                        .padding(.horizontal)
-                        .frame(maxWidth: .infinity , alignment: .trailing)
-                        .onTapGesture {
-                            createTopic()
-                            for cloID in selectedCLOs {
-                                if let cloIDInt = cloID as? Int {
-                                    createCLO_Topic_map(cloIDs: [cloIDInt], topicID: t_id)
-                                }
+                    Button("Add"){
+                        createTopic()
+                        for cloID in selectedCLOs {
+                            if let cloIDInt = cloID as? Int {
+                                createCLO_Topic_map(cloIDs: [cloIDInt], topicID: t_id)
                             }
                         }
+                    }
+                    .bold()
+                    .padding()
+                    .foregroundColor(.black)
+                    .background(Color.green)
+                    .cornerRadius(8)
+                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity , alignment: .trailing)
                     
                     SearchBar(text: $searchText)
                         .padding()
@@ -235,7 +236,7 @@ struct ViewTopics: View { // Design 100% Ok
         }
     }
     func createTopic() {
-        guard let url = URL(string: "http://localhost:4000/addtopic") else {
+        guard let url = URL(string: "http://localhost:4000/addtopic1") else {
             return
         }
         
@@ -258,12 +259,12 @@ struct ViewTopics: View { // Design 100% Ok
                 do {
                     if let result = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                        let topicID = result["t_id"] as? Int {
-                        createCLO_Topic_map(cloIDs: selectedCLOs, topicID: topicID)
+                        self.createCLO_Topic_map(cloIDs: self.selectedCLOs, topicID: topicID)
                     }
-                    topicViewModel.getCourseTopic(courseID: c_id) // Refresh topics after creating a new one
-                    showAlert = true
+                    self.topicViewModel.getCourseTopic(courseID: self.c_id) // Refresh topics after creating a new one
+                    self.showAlert = true
                     DispatchQueue.main.async {
-                        t_name = ""
+                        self.t_name = ""
                     }
                 } catch {
                     print("Error parsing JSON:", error)
@@ -274,12 +275,12 @@ struct ViewTopics: View { // Design 100% Ok
         }.resume()
     }
     func createCLO_Topic_map(cloIDs: [Int], topicID: Int) {
-        guard let url = URL(string: "http://localhost:4000/clotopicmap1") else {
+        guard let url = URL(string: "http://localhost:4000/clotopicmap") else {
             return
         }
         
         let parameters: [String: Any] = [
-            "clo_id": [cloIDs], // Assuming cloID is a single value
+            "clo_id": cloIDs, // Assuming cloID is a single value
             "t_id": topicID
         ]
         
@@ -297,6 +298,9 @@ struct ViewTopics: View { // Design 100% Ok
                 do {
                     let result = try JSONSerialization.jsonObject(with: data)
                     print("Result from server:", result)
+                    DispatchQueue.main.async {
+                        self.selectedCLOs = []
+                    }
                 } catch {
                     print("Error parsing JSON:", error)
                 }
@@ -725,7 +729,7 @@ struct AddSubTopics: View { // Design 100% Ok
         let topic = filteredSubTopics[index]
         let newStatus = topic.status == "Enable" ? "Disable" : "Enable"
         
-        guard let url = URL(string: "http://localhost:4000/enabledisablesubtopic/\(topic.st_id)") else {
+        guard let url = URL(string: "http://localhost:4000/enabledisablesubtopic/\(topic.t_id)") else {
             return
         }
         
@@ -844,11 +848,11 @@ struct EditSubTopics: View { // Design 100% Ok
         }
     }
     func updateSubTopic() {
-        guard let url = URL(string: "http://localhost:4000/updateanysubtopic/\(subtopic.st_id)") else {
+        guard let url = URL(string: "http://localhost:4000/updateanysubtopic/\(subtopic.t_id)") else {
             return
         }
 
-        let updatedSubtopic = SubTopic(st_id: subtopic.st_id, st_name: editsubtopicname, status: subtopic.status)
+        let updatedSubtopic = SubTopic(t_id: subtopic.t_id, st_id: subtopic.st_id, st_name: editsubtopicname, status: subtopic.status)
 
         guard let encodedData = try? JSONEncoder().encode(updatedSubtopic) else {
             return
