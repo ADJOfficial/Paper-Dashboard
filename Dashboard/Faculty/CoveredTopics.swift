@@ -98,18 +98,6 @@ struct CoveredTopics: View {
                                 .cornerRadius(10)
                         }
                         .padding()
-                        
-//                        Button(action: {
-//                            showTaughtCheckboxes.toggle()
-//                        }) {
-//                            Text("Progress")
-//                                .font(.headline)
-//                                .foregroundColor(.black)
-//                                .padding()
-//                                .background(Color.green)
-//                                .cornerRadius(10)
-//                        }
-//                        .padding()
                     }
                     
                     ScrollView {
@@ -150,14 +138,15 @@ struct CoveredTopics: View {
                                         }
                                         
                                         if showCommonCheckboxes && topicTaughtViewModel.commonTopics[topic.t_id]?.contains(subtopic.st_id) == true {
-                                            ForEach(topicTaughtViewModel.taught.filter { $0.t_id == topic.t_id && $0.st_id == subtopic.st_id }, id: \.f_id) { taught in
-                                                Text("Taught by : \(taught.f_name)")
+                                            ForEach(topicTaughtViewModel.getCommonFacultyNames(for: topic.t_id), id: \.self) { facultyName in
+                                                Text("Taught by: \(facultyName)")
                                                     .foregroundColor(.orange)
-                                                    .frame(maxWidth: .infinity , alignment: .leading)
+                                                    .frame(maxWidth: .infinity, alignment: .leading)
                                             }
                                         }
                                     }
                                 }
+                                
                                 .padding(5)
                             } label: {
                                 HStack {
@@ -198,7 +187,8 @@ struct CoveredTopics: View {
                         if let topicID = allTopicID {
                             subtopicViewModel.getTopicSubTopic(topicID: topicID.t_id)
                         }
-                        topicTaughtViewModel.getTopicTaught(courseID: c_id)
+                        topicTaughtViewModel.getTopicTaught(courseID: c_id, facultyID: f_id)
+                        topicTaughtViewModel.getAllTopicTaught(courseID: c_id)
                     }
                 }
             }
@@ -206,11 +196,11 @@ struct CoveredTopics: View {
             .background(Image("fiii").resizable().ignoresSafeArea())
         }
     }
-    func isCommonTopic(topicID: Int) -> Bool {
-        let taughtTopics = topicTaughtViewModel.taught.filter { $0.t_id == topicID }
-        let uniqueFacultyIDs = Set(taughtTopics.map { $0.f_id })
-        return uniqueFacultyIDs.count > 1
-    }
+//    func isCommonTopic(topicID: Int) -> Bool {
+//        let taughtTopics = topicTaughtViewModel.taught.filter { $0.t_id == topicID }
+//        let uniqueFacultyIDs = Set(taughtTopics.map { $0.f_id })
+//        return uniqueFacultyIDs.count > 1
+//    }
     private func toggleCourseSelection(topicID: Int, subtopicID: Int) {
         if selectedSubTopic.contains(subtopicID) {
             selectedSubTopic.remove(subtopicID)
@@ -228,7 +218,6 @@ struct CoveredTopics: View {
             selectedSubTopic.remove(subtopicID)
             selectedTopic.remove(topicID)
         }
-        
         createCoveredTopic(facultyID: f_id, courseID: c_id, topicID: topicID, subtopicID: subtopicID)
     }
     private func createCoveredTopic(facultyID: Int, courseID: Int, topicID: Int, subtopicID: Int) {
@@ -288,7 +277,7 @@ struct CoveredTopics: View {
 }
 struct CoveredTopics_Previews: PreviewProvider {
     static var previews: some View {
-        CoveredTopics(f_id:2, c_id: 1, c_code: "", c_title: "", subtopics: SubTopic(t_id: 0, st_id: 0, st_name: "", status: ""))
+        CoveredTopics(f_id:34, c_id: 1, c_code: "", c_title: "", subtopics: SubTopic(t_id: 0, st_id: 0, st_name: "", status: ""))
     }
 }
 

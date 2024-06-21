@@ -102,6 +102,7 @@ struct Session: View { // Design 100% Ok
                                     .frame(maxWidth: .infinity , alignment: .leading)
                                 NavigationLink{
                                     EditSession(s_name: sessionName, s_year: Int(sessionYear) ?? 0, session: cr)
+                                        .navigationBarBackButtonHidden(true)
                                 }label: {
                                     Image(systemName: "square.and.pencil.circle")
                                         .font(.title)
@@ -138,14 +139,23 @@ struct Session: View { // Design 100% Ok
                     sessionViewModel.fetchExistingSession()
                 }
             }
+            .navigationBarItems(leading: backButton)
             .background(Image("fc").resizable().ignoresSafeArea())
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Congratulations"), message: Text("Session Created Successfully"), dismissButton: .default(Text("OK")))
             }
         }
     }
-    
-
+    @Environment(\.presentationMode) var presentationMode
+    private var backButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundColor(.blue)
+                .imageScale(.large)
+        }
+    }
     func createCLO() {
         guard let url = URL(string: "http://localhost:2000/addsession") else {
             return
@@ -299,6 +309,17 @@ struct EditSession: View { // Design 100% Ok
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Congratulations"), message: Text("Session Updated Successfully"), dismissButton: .default(Text("OK")))
             }
+            .navigationBarItems(leading: backButton)
+        }
+    }
+    @Environment(\.presentationMode) var presentationMode
+    private var backButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundColor(.blue)
+                .imageScale(.large)
         }
     }
     func updateSession() {

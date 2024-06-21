@@ -100,6 +100,34 @@ struct HODWelcome: View { // Design 100% OK
                     .background(Color.teal.opacity(0.9))
                     .cornerRadius(8)
                     .padding(.all)
+                    
+                    NavigationLink{
+                        Session()
+                            .navigationBarBackButtonHidden(true)
+                    } label: {
+                        Text("Session")
+                    }
+                    .foregroundColor(.black)
+                    .padding()
+                    .bold()
+                    .frame(width: 150)
+                    .background(Color.teal.opacity(0.9))
+                    .cornerRadius(8)
+                    .padding(.all)
+                    
+                    NavigationLink{
+                        Difficulty()
+                            .navigationBarBackButtonHidden(true)
+                    } label: {
+                        Text("Difficulty")
+                    }
+                    .foregroundColor(.black)
+                    .padding()
+                    .bold()
+                    .frame(width: 150)
+                    .background(Color.teal.opacity(0.9))
+                    .cornerRadius(8)
+                    .padding(.all)
                 }
                 Spacer()
                 

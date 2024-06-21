@@ -100,7 +100,7 @@ struct DirectorLogin: View {
     }
     
     func login() {
-        if username == "Dr Jamil" &&  password == "sawaar@786" {
+        if username == "Dr Jamil" &&  password == "786" {
             isLoggedIn = true
             print("Login Successfull")
             

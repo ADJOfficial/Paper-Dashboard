@@ -100,9 +100,20 @@ struct Difficulty: View {
             }
             Spacer()
         }
+        .navigationBarItems(leading: backButton)
         .background(Image("fc").resizable().ignoresSafeArea())
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Congratulations"), message: Text("Questions Difficulty Updated Successfully"), dismissButton: .default(Text("OK")))
+        }
+    }
+    @Environment(\.presentationMode) var presentationMode
+    private var backButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundColor(.blue)
+                .imageScale(.large)
         }
     }
     func createDifficulty() {

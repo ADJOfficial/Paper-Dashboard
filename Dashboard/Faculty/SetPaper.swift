@@ -20,7 +20,6 @@ struct PaperTextFields {
 
 struct SetPaper: View {
     
-    
     var f_id: Int
     var f_name: String
     var c_id: Int
@@ -36,9 +35,6 @@ struct SetPaper: View {
     @State private var selectedSemRadioButton: String? = nil
     @State private var selectedTermRadioButton: String? = nil
     @State private var selectedValue = 0
-    var option = ["2020" , "2021" , "2022" , "2023" , "2024"]
-    
-//    @StateObject private var uploadedpaperViewModel = UploadedPaperViewModel()
     @State private var paperStatus: String = ""
     
     @State private var showAlert = false
@@ -134,36 +130,6 @@ struct SetPaper: View {
                         .padding(2)
                         
                         HStack {
-                            Text("Paper Name :")
-                                .bold()
-                                .padding(.horizontal)
-                                .frame(maxWidth: .infinity , alignment: .leading)
-                                .font(.title3)
-                                .foregroundColor(Color.white)
-                            TextField("" , text: $paperSetting.paperName)
-                                .background(Color.gray.opacity(0.8))
-                                .cornerRadius(8)
-                                .frame(width: 180 , height: 20)
-                                .padding(.horizontal)
-                        }
-                        .padding(2)
-                        
-                        HStack {
-                            Text("Date of Exam :")
-                                .bold()
-                                .padding(.horizontal)
-                                .frame(maxWidth: .infinity , alignment: .leading)
-                                .font(.title3)
-                                .foregroundColor(Color.white)
-                            TextField("" , text: $paperSetting.examDate)
-                                .background(Color.gray.opacity(0.8))
-                                .cornerRadius(8)
-                                .frame(width: 180 , height: 20)
-                                .padding(.horizontal)
-                        }
-                        .padding(2)
-                        
-                        HStack {
                             Text("Duration :")
                                 .bold()
                                 .padding(.horizontal)
@@ -193,109 +159,75 @@ struct SetPaper: View {
                         }
                         .padding(2)
                         
-                        VStack{
-                            HStack{
-                                Text("Total Marks :")
-                                    .bold()
-                                    .padding(.horizontal)
-                                    .frame(maxWidth: .infinity , alignment: .leading)
-                                    .font(.title3)
-                                    .foregroundColor(Color.white)
-                                TextField("" , value: $paperSetting.totalMarks, formatter: NumberFormatter())
-                                    .background(Color.gray.opacity(0.8))
-                                    .cornerRadius(8)
-                                    .frame(width: 180 , height: 20)
-                                    .padding(.horizontal)
-                            }
-                            .padding(2)
-                            
-                            VStack{
-                                Text("Semester :")
-                                    .bold()
-                                    .padding(.horizontal)
-                                    .frame(maxWidth: .infinity , alignment: .leading)
-                                    .font(.title3)
-                                    .foregroundColor(Color.white)
-                                HStack{
-                                    Spacer()
-                                    SemesterRadioButton(title: "Fall", isSelected: selectedSemRadioButton == "Fall") {
-                                        selectedSemRadioButton = "Fall"
-                                    }
-                                    .foregroundColor(selectedSemRadioButton == "Fall" ? .green : .white)
-                                    Spacer()
-                                    SemesterRadioButton(title: "Spring", isSelected: selectedSemRadioButton == "Spring") {
-                                        selectedSemRadioButton = "Spring"
-                                    }
-                                    .foregroundColor(selectedSemRadioButton == "Spring" ? .green : .white)
-                                    Spacer()
-                                    SemesterRadioButton(title: "Summer", isSelected: selectedSemRadioButton == "Summer") {
-                                        selectedSemRadioButton = "Summer"
-                                    }
-                                    .foregroundColor(selectedSemRadioButton == "Summer" ? .green : .white)
-                                    Spacer()
-                                }
-                            }
-                            .padding(2)
-                            
-                            VStack{
-                                Text("Term :")
-                                    .bold()
-                                    .padding(.horizontal)
-                                    .frame(maxWidth: .infinity , alignment: .leading)
-                                    .font(.title3)
-                                    .foregroundColor(Color.white)
-                                HStack{
-                                    Spacer()
-                                    SemesterRadioButton(title: "Mid", isSelected: selectedTermRadioButton == "Mid") {
-                                        selectedTermRadioButton = "Mid"
-                                    }
-                                    .foregroundColor(selectedTermRadioButton == "Mid" ? .green : .white)
-                                    Spacer()
-                                    SemesterRadioButton(title: "Final", isSelected: selectedTermRadioButton == "Final") {
-                                        selectedTermRadioButton = "Final"
-                                    }
-                                    .foregroundColor(selectedTermRadioButton == "Final" ? .green : .white)
-                                    Spacer()
-                                }
-                            }
-                            .padding(2)
-                            
-                            HStack{
-                                Text("Questions :")
-                                    .bold()
-                                    .padding(.horizontal)
-                                    .frame(maxWidth: .infinity , alignment: .leading)
-                                    .font(.title3)
-                                    .foregroundColor(Color.white)
-                                TextField("" , text: $totalQuestions)
-                                    .background(Color.gray.opacity(0.8))
-                                    .cornerRadius(8)
-                                    .frame(width: 180 , height: 20)
-                                    .padding(.horizontal)
-                            }
-                            .padding(2)
-                            
-                            HStack{
-                                Text("Year :")
-                                    .bold()
-                                    .padding(.horizontal)
-                                    .frame(maxWidth: .infinity , alignment: .leading)
-                                    .font(.title3)
-                                    .foregroundColor(Color.white)
-                                Picker("" ,selection: $selectedValue){
-                                    ForEach(0..<option.count){ index in
-                                        Text(option[index])
-                                    }
-                                }
-                                .pickerStyle(.menu)
-                                .accentColor(Color.green)
-                                
-                            }
-                            .padding(2)
+                        HStack {
+                            Text("Date of Exam :")
+                                .bold()
+                                .padding(.horizontal)
+                                .frame(maxWidth: .infinity , alignment: .leading)
+                                .font(.title3)
+                                .foregroundColor(Color.white)
+                            TextField("" , text: $paperSetting.examDate)
+                                .background(Color.gray.opacity(0.8))
+                                .cornerRadius(8)
+                                .frame(width: 180 , height: 20)
+                                .padding(.horizontal)
                         }
+                        .padding(2)
+
+                        VStack{
+                            Text("Term :")
+                                .bold()
+                                .padding(.horizontal)
+                                .frame(maxWidth: .infinity , alignment: .leading)
+                                .font(.title3)
+                                .foregroundColor(Color.white)
+                            HStack{
+                                Spacer()
+                                SemesterRadioButton(title: "Mid", isSelected: selectedTermRadioButton == "Mid") {
+                                    selectedTermRadioButton = "Mid"
+                                }
+                                .foregroundColor(selectedTermRadioButton == "Mid" ? .green : .white)
+                                Spacer()
+                                SemesterRadioButton(title: "Final", isSelected: selectedTermRadioButton == "Final") {
+                                    selectedTermRadioButton = "Final"
+                                }
+                                .foregroundColor(selectedTermRadioButton == "Final" ? .green : .white)
+                                Spacer()
+                            }
+                        }
+                        .padding(2)
+                            
+//                            VStack{
+//                                Text("Semester :")
+//                                    .bold()
+//                                    .padding(.horizontal)
+//                                    .frame(maxWidth: .infinity , alignment: .leading)
+//                                    .font(.title3)
+//                                    .foregroundColor(Color.white)
+//                                HStack{
+//                                    Spacer()
+//                                    SemesterRadioButton(title: "Fall", isSelected: selectedSemRadioButton == "Fall") {
+//                                        selectedSemRadioButton = "Fall"
+//                                    }
+//                                    .foregroundColor(selectedSemRadioButton == "Fall" ? .green : .white)
+//                                    Spacer()
+//                                    SemesterRadioButton(title: "Spring", isSelected: selectedSemRadioButton == "Spring") {
+//                                        selectedSemRadioButton = "Spring"
+//                                    }
+//                                    .foregroundColor(selectedSemRadioButton == "Spring" ? .green : .white)
+//                                    Spacer()
+//                                    SemesterRadioButton(title: "Summer", isSelected: selectedSemRadioButton == "Summer") {
+//                                        selectedSemRadioButton = "Summer"
+//                                    }
+//                                    .foregroundColor(selectedSemRadioButton == "Summer" ? .green : .white)
+//                                    Spacer()
+//                                }
+//                            }
+//                            .padding(2)
                     }
                     .padding()
                 }
+                .frame(height: 450)
                 .background(
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(Color.green.opacity(0.5), lineWidth: 1)
@@ -359,7 +291,6 @@ struct SetPaper: View {
             "degree": paperSetting.degree,
             "t_marks": paperSetting.totalMarks,
             "term": selectedTermRadioButton ?? "",
-            "year": option[selectedValue],
             "exam_date": paperSetting.examDate,
             "semester": selectedSemRadioButton ?? "" ,
             "t_questions": totalQuestions,
@@ -431,7 +362,7 @@ struct StartMakingPaper: View {
 //    @State private var paperStatus: String = ""
     
     @State private var showAlert = false
-    
+    @State private var showPopover = false
     
     @State private var q_marks = ""
     @State private var selectedDifficulty = 0
@@ -455,71 +386,72 @@ struct StartMakingPaper: View {
     
     
     var body: some View {
-        VStack{
-            Text("Paper")
-                .bold()
-                .font(.largeTitle)
-                .foregroundColor(Color.white)
-//            Spacer()
-            HStack {
-                Image("u")
-                    .resizable()
-                    .font(.largeTitle)
-                    .foregroundColor(Color.green)
-                Text("Barani Institute of Information Technology\nPMAS Arid Agriculture University\nRawalpindi Pakistan\nFall 2024: Mid Term Examination")
-                    .foregroundColor(Color.white)
-                    .multilineTextAlignment(.center)
-                    .frame(width: 260 , height: 110)
-                Image("u")
-                    .resizable()
-                    .foregroundColor(Color.green)
-
-            }
-            ScrollView{
-                VStack{
-                    HStack{
-                        Text("Course Title: \(c_title)")
-                            .bold()
-                            .padding(.all,1)
-                            .frame(maxWidth: .infinity , alignment: .leading)
-                        Text("Course Code: \(c_code)")
-                            .bold()
-                            .padding(.all,1)
-                            .frame(maxWidth: .infinity , alignment: .leading)
-                    }
-                    HStack{
-                        Text("Date of Exam: \(exam_date)")
-                            .bold()
-                            .padding(.all,1)
-                            .frame(maxWidth: .infinity , alignment: .leading)
-                        Text("Duration: \(duration)")
-                            .bold()
-                            .padding(.all,1)
-                            .frame(maxWidth: .infinity , alignment: .leading)
-                    }
-                    HStack{
-                        Text("Degree Program: \(degree)")
-                            .bold()
-                            .padding(.all,1)
-                            .frame(maxWidth: .infinity , alignment: .leading)
-                        Text("Total Marks: \(totalMarks)")
-                            .bold()
-                            .padding(.all,1)
-                            .frame(maxWidth: .infinity , alignment: .leading)
-                    }
-                }
-                Text("Teacher Name: \(f_name)")
+        NavigationView {
+            VStack {
+                Text("Paper")
                     .bold()
-                    .padding(.all,1)
-                    .frame(maxWidth: .infinity , alignment: .center)
-            }
-            .padding()
-            .frame(height: 150)
-            .foregroundColor(Color.white)
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.green.opacity(0.5), lineWidth: 2)
-            )
+                    .font(.largeTitle)
+                    .foregroundColor(Color.white)
+                //            Spacer()
+                HStack {
+                    Image("u")
+                        .resizable()
+                        .font(.largeTitle)
+                        .foregroundColor(Color.green)
+                    Text("Barani Institute of Information Technology\nPMAS Arid Agriculture University\nRawalpindi Pakistan\nFall 2024: Mid Term Examination")
+                        .foregroundColor(Color.white)
+                        .multilineTextAlignment(.center)
+                        .frame(width: 260 , height: 110)
+                    Image("u")
+                        .resizable()
+                        .foregroundColor(Color.green)
+                    
+                }
+                ScrollView{
+                    VStack{
+                        HStack{
+                            Text("Course Title: \(c_title)")
+                                .bold()
+                                .padding(.all,1)
+                                .frame(maxWidth: .infinity , alignment: .leading)
+                            Text("Course Code: \(c_code)")
+                                .bold()
+                                .padding(.all,1)
+                                .frame(maxWidth: .infinity , alignment: .leading)
+                        }
+                        HStack{
+                            Text("Date of Exam: \(exam_date)")
+                                .bold()
+                                .padding(.all,1)
+                                .frame(maxWidth: .infinity , alignment: .leading)
+                            Text("Duration: \(duration)")
+                                .bold()
+                                .padding(.all,1)
+                                .frame(maxWidth: .infinity , alignment: .leading)
+                        }
+                        HStack{
+                            Text("Degree Program: \(degree)")
+                                .bold()
+                                .padding(.all,1)
+                                .frame(maxWidth: .infinity , alignment: .leading)
+                            Text("Total Marks: \(totalMarks)")
+                                .bold()
+                                .padding(.all,1)
+                                .frame(maxWidth: .infinity , alignment: .leading)
+                        }
+                    }
+                    Text("Teacher Name: \(f_name)")
+                        .bold()
+                        .padding(.all,1)
+                        .frame(maxWidth: .infinity , alignment: .center)
+                }
+                .padding()
+                .frame(height: 150)
+                .foregroundColor(Color.white)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.green.opacity(0.5), lineWidth: 2)
+                )
                 VStack{
                     HStack{
                         Text("Question")
@@ -527,21 +459,6 @@ struct StartMakingPaper: View {
                             .foregroundColor(Color.white)
                             .padding(.horizontal)
                             .frame(maxWidth: .infinity , alignment: .leading)
-//                        Text("CLO :")
-//                            .foregroundColor(Color.white)
-//                        Picker(selection: $selectedClo, label: Text("")) {
-//                            Text("CLOs").tag(nil as Int?)
-//                            ForEach(cloViewModel.existing, id: \.clo_id) { clo in
-//                                Text(clo.clo_text)
-//                                    .tag(clo.clo_id as Int?)
-//                            }
-//                        }
-//                        .accentColor(Color.green)
-//                        .onChange(of: (selectedClo)) { selectedCloID in
-//                            if let selectedCLOID = selectedCloID {
-//                                print("Selected CLO ID: \(selectedCLOID)")
-//                            }
-//                        }
                     }
                     TextField("Type Question", text: $questions)
                         .padding()
@@ -577,7 +494,10 @@ struct StartMakingPaper: View {
                                 print("Selected topic ID: \(selectedTopicID)")
                                 topiccloViewModel.getTopicCLO(topicID: selectedTopicID)
                                 ForEach(topiccloViewModel.topicCLO, id: \.self) { clo in
+//                                    print("Selected topic ID: \(clo.clo_code)")
                                     Text(clo.clo_code)
+                                        .foregroundColor(Color.white)
+                                    
                                 }
                             }
                         }
@@ -614,14 +534,14 @@ struct StartMakingPaper: View {
                             createQuestion()
                             showAlert
                         }
-                            .bold()
-                            .padding()
-                            .foregroundColor(.black)
-                            .background(Color.green)
-                            .cornerRadius(8)
-                            .frame(width: 100)
-//                            .padding(.horizontal)
-                            .frame(alignment: .trailing)
+                        .bold()
+                        .padding()
+                        .foregroundColor(.black)
+                        .background(Color.green)
+                        .cornerRadius(8)
+                        .frame(width: 100)
+                        //                            .padding(.horizontal)
+                        .frame(alignment: .trailing)
                         Spacer()
                     }
                     Spacer()
@@ -629,22 +549,59 @@ struct StartMakingPaper: View {
                         ScrollView {
                             ForEach(questionViewModel.uploadedQuestions.indices, id: \.self) { index in
                                 let cr = questionViewModel.uploadedQuestions[index]
-                                VStack{
-                                    Text("Question # 0\(index + 1)")
-                                        .font(.headline)
-                                        .foregroundColor(Color.orange)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                    Text(cr.q_text)
-                                        .font(.headline)
-                                        .foregroundColor(Color.white)
-                                        .frame(maxWidth: .infinity , alignment: .leading)
-                                    Text("[ \(cr.q_difficulty) , \(cr.q_marks) , \(cr.t_name) , \(cr.clo_code) ]")
-                                        .foregroundColor(Color.yellow)
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                VStack {
+                                    NavigationLink{
+                                        let editViewModel = EditQuestionViewModel(
+                                            question: cr,
+                                            options: ["Easy", "Medium", "Hard"], // Replace with actual options
+                                            topics: topicViewModel.existing
+                                        )
+                                        EditPaperQuestion(viewModel: editViewModel)
+                                            .navigationBarBackButtonHidden(true)
+                                    }label: {
+                                        Image(systemName: "square.and.pencil.circle")
+                                            .font(.title)
+                                            .foregroundColor(Color.orange)
+                                            .frame(maxWidth: .infinity , alignment: .trailing)
+                                    }
+                                    VStack {
+                                        Text("Question # 0\(index + 1)")
+                                            .font(.headline)
+                                            .foregroundColor(Color.orange)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        Text(cr.q_text)
+                                            .font(.headline)
+                                            .foregroundColor(Color.white)
+                                            .frame(maxWidth: .infinity , alignment: .leading)
+                                        Text("[ \(cr.q_difficulty) , \(cr.q_marks) , \(cr.t_name) , \(cr.clo_code) ]")
+                                            .foregroundColor(Color.yellow)
+                                            .frame(maxWidth: .infinity, alignment: .trailing)
+                                            .onTapGesture {
+                                                // Toggle showPopover to true
+                                                showPopover.toggle()
+                                            }
+                                            .overlay(
+                                                Group {
+                                                    if showPopover {
+                                                        VStack {
+                                                            Text("\(cr.clo_code) : \(cr.clo_text)")
+                                                                .padding()
+                                                                .foregroundColor(Color.black)
+                                                                .background(Color.gray.opacity(1))
+                                                                .cornerRadius(10)
+                                                        }
+                                                        .onTapGesture {
+                                                            // Toggle showPopover to false when tapped outside the popover
+                                                            showPopover.toggle()
+                                                        }
+                                                    }
+                                                }
+                                            )
+                                    }
+                                    Divider()
+                                        .background(Color.white)
+                                        .padding(1)
                                 }
-                                Divider()
-                                    .background(Color.white)
-                                .padding(1)
                             }
                             if questionViewModel.uploadedQuestions.isEmpty {
                                 Text("No Questions Found For Course - \(c_title)")
@@ -656,7 +613,7 @@ struct StartMakingPaper: View {
                         }
                         .padding()
                     }
-//                    .padding()
+                    //                    .padding()
                     .frame(height: 300)
                     .foregroundColor(Color.white)
                     .background(
@@ -664,23 +621,24 @@ struct StartMakingPaper: View {
                             .stroke(Color.green.opacity(0.5), lineWidth: 2)
                     )
                     .onAppear{
-                        questionViewModel.getPaperQuestions(paperID: 1)
+                        questionViewModel.getPaperQuestions(paperID: p_id)
                     }
                 }
                 .onAppear{
                     topicViewModel.getCourseTopic(courseID: c_id)
                 }
-                .onAppear{
-                    cloViewModel.getCourseCLO(courseID: c_id)
-                }
-        }
-        .navigationBarItems(leading: backButton)
-        .background(Image("fiii").resizable().ignoresSafeArea())
-        .sheet(isPresented: $isShowingImagePicker) {
-            ImagePickerView(result: handleImagePickerResult)
-        }
-        .alert(isPresented: $showAlert) {
-            Alert(title: Text("Question Created Successfully"), message: Text("Click on Plus Button Below To Add More Question For This Paper if You Want..."), dismissButton: .default(Text("OK")))
+//                .onAppear{
+//                    cloViewModel.getCourseCLO(courseID: c_id)
+//                }
+            }
+            .navigationBarItems(leading: backButton)
+            .background(Image("fiii").resizable().ignoresSafeArea())
+            .sheet(isPresented: $isShowingImagePicker) {
+                ImagePickerView(result: handleImagePickerResult)
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Question Created Successfully"), message: Text("Click on Plus Button Below To Add More Question For This Paper if You Want..."), dismissButton: .default(Text("OK")))
+            }
         }
     }
     @Environment(\.presentationMode) var presentationMode
@@ -720,7 +678,10 @@ struct StartMakingPaper: View {
 //            print("Selected CLO not found")
 //            return
 //        }
-        
+        guard let selectClo = topiccloViewModel.topicCLO.first else {
+            print("CLO not found for selected topic")
+            return
+        }
         let question = [
             "q_text": questions,
             "q_marks": q_marks,
@@ -729,7 +690,7 @@ struct StartMakingPaper: View {
             "p_id": p_id,
             "f_id": f_id,
             "c_id": c_id,
-//            "clo_id": selectClo.clo_id
+            "clo_id": selectClo.clo_id
         ] as [String: Any]
         
         let boundary = UUID().uuidString
@@ -852,6 +813,6 @@ struct ImagePickerView: UIViewControllerRepresentable {
 struct SetPaper_Previews: PreviewProvider {
     static var previews: some View {
 //        SetPaper(f_id: 1, f_name: "", c_id: 1, c_title: "", c_code: "", p_id: 1)
-        StartMakingPaper(f_id: 1, f_name: "", c_id: 1, c_title: "", c_code: "", paperName: "", exam_date: "", degree: "", duration: 0, totalMarks: 0, p_id: 1, t_id: 1)
+        StartMakingPaper(f_id: 1, f_name: "", c_id: 1, c_title: "", c_code: "", paperName: "", exam_date: "", degree: "", duration: 0, totalMarks: 0, p_id: 26, t_id: 1)
     }
 }

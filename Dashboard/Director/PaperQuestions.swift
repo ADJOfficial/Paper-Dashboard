@@ -265,7 +265,7 @@ struct PaperQuestions: View {
                                         .cornerRadius(8)
                                         .padding(.horizontal)
                                     Button(action: {
-                                        createFeedback()
+                                        createFeedback(q_id: cr.q_id)
                                     }, label: {
                                         Image(systemName: "paperplane.fill")
                                             .font(.title)
@@ -277,6 +277,13 @@ struct PaperQuestions: View {
                             Divider()
                                 .background(Color.white)
                                 .padding()
+                        }
+                        if filteredQuestions.isEmpty {
+                            Text("No Questions Found For This Course \(c_title) Paper ")
+                                .font(.headline)
+                                .foregroundColor(.orange)
+                                .padding()
+                                .frame(maxWidth: .infinity)
                         }
                     }
                 }
@@ -384,7 +391,7 @@ struct PaperQuestions: View {
             }
         }.resume()
     }
-    func createFeedback() {
+    func createFeedback(q_id: Int) {
         guard let url = URL(string: "http://localhost:3000/addfeedback") else {
             return
         }
@@ -393,7 +400,7 @@ struct PaperQuestions: View {
             "f_id": f_id,
             "c_id": c_id,
             "p_id": p_id,
-            "q_id": q_id,
+            "q_id": q_id,  // Use the q_id parameter here
             "fb_details": fb_details
         ] as [String : Any]
 
@@ -411,10 +418,8 @@ struct PaperQuestions: View {
                 do {
                     let result = try JSONSerialization.jsonObject(with: data)
                     print("Result from server:", result)
-//                    facultiesViewModel.fetchExistingFaculties() // Refresh faculties after creating a new one
                     DispatchQueue.main.async {
                         fb_details = ""
-                        
                     }
                 } catch {
                     print("Error parsing JSON:", error)
@@ -424,6 +429,7 @@ struct PaperQuestions: View {
             }
         }.resume()
     }
+
 
 //    private func updateApprovedPaperButtonVisibility() {
 //        let allApproved = questionViewModel.uploadedQuestions.allSatisfy { assignedQuestion in
@@ -601,7 +607,7 @@ struct PaperTopic: View { // For Radio Button
                         .padding(1)
                     }
                     if filteredTopics.isEmpty {
-                        Text("No Topic Found For This Course Paper - \(c_title)")
+                        Text("No Topic Found For This Course \(c_title) Paper")
                             .font(.headline)
                             .foregroundColor(.orange)
                             .padding()
@@ -648,7 +654,7 @@ struct PaperTopic: View { // For Radio Button
                         }
                     }
                     if cloCodes.isEmpty {
-                        Text("No CLO Found For This Course Paper - \(c_title)")
+                        Text("No CLO Found For This Course \(c_title) Paper")
                             .font(.headline)
                             .foregroundColor(.orange)
                             .padding()
@@ -784,7 +790,7 @@ struct AdditionalQuestions: View { // For Radio Button
 
 struct PaperTopic_Previews: PreviewProvider {
     static var previews: some View {
-        PaperQuestions(paperID: 1, q_id: 1, p_id: 1, c_id: 1, c_code: "", c_title: "", f_id: 1, f_name: "", clo_text: "", t_name: "", exam_date: "", degree: "", duration: 1, t_marks: 1)
+        PaperQuestions(paperID: 1, q_id: 1, p_id: 26, c_id: 1, c_code: "", c_title: "", f_id: 1, f_name: "", clo_text: "", t_name: "", exam_date: "", degree: "", duration: 1, t_marks: 1)
 //        AdditionalQuestions()
 //        PaperTopic(c_id: 3, t_name: "", c_title: "", c_code: "")
     }

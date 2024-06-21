@@ -70,7 +70,18 @@ struct DirectorWelcome: View { // Design 100% Ok
                 .foregroundColor(.teal)
                 .frame(maxWidth: .infinity , alignment: .trailing)
             }
+            .navigationBarItems(leading: backButton)
             .background(Image("ft").resizable().ignoresSafeArea())
+        }
+    }
+    @Environment(\.presentationMode) var presentationMode
+    private var backButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundColor(.blue)
+                .imageScale(.large)
         }
     }
 }

@@ -55,23 +55,19 @@ struct HODLogin: View {
             .frame(width: 150, height: 60)
             .background(Color.teal.opacity(0.9))
             .cornerRadius(8)
-            
-//            Spacer()
         }
+        .navigationBarItems(leading: backButton)
+        .background(Image("fc").resizable().ignoresSafeArea())
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Invalid credentials"), message: Text("Please enter valid username and password"), dismissButton: .default(Text("OK")))
         }
         .fullScreenCover(isPresented: $isLoggedIn){
            HODWelcome(username: username)
-            
-//            Spacer()
         }
-        .navigationBarItems(leading: backButton)
-        .background(Image("fc").resizable().ignoresSafeArea())
     }
 
     func login() {
-        if username == "" &&  password == "" {
+        if username == "Dr Munir" &&  password == "123" {
             isLoggedIn = true
             print("Login Successfull")
         }

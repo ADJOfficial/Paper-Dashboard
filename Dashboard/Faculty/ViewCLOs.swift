@@ -147,7 +147,7 @@ struct ViewCLOs: View { // Design 100% Ok
                                     
                                     NavigationLink{
                                         EditCLO(f_id: f_id, c_id: c_id, c_title: c_title, clo: cr)
-                                        //                                        .navigationBarBackButtonHidden(true)
+                                            .navigationBarBackButtonHidden(true)
                                     }label: {
                                         Image(systemName: "square.and.pencil.circle")
                                             .font(.title)
@@ -411,6 +411,6 @@ struct EditCLO: View { // Design 100% Ok
 
 struct ViewCLOs_Previews: PreviewProvider {
     static var previews: some View {
-        ViewCLOs(f_id: 0, c_id: 3, c_title: "")
+        ViewCLOs(f_id: 0, c_id: 1, c_title: "")
     }
 }

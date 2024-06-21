@@ -29,7 +29,7 @@ struct ViewYourCourses: View { // Design 100% OK
                     .font(.largeTitle)
                     .foregroundColor(Color.white)
                 NavigationLink {
-                    Mail(fb_details: "", f_id: f_id, c_id: c_id, c_title: c_title, c_code: c_code, f_name: f_name, q_id: 0, p_id: 0)
+                    Mail(f_id: f_id, c_id: c_id, fb_details: "", c_title: c_title, c_code: c_code, f_name: f_name, q_id: 0, p_id: 0)
                         .navigationBarBackButtonHidden(true)
                 } label: {
                     Image(systemName: "mail.fill")
@@ -236,9 +236,9 @@ struct Subject: View {
 
 struct ViewYourCourses_Previews: PreviewProvider {
     static var previews: some View {
-//        Mail(fb_details: "", c_title: "", c_code: "", f_name: "", q_id: 1, p_id: 1)
+        Mail(f_id: 1,c_id: 1,fb_details: "", c_title: "", c_code: "", f_name: "", q_id: 1, p_id: 1)
 //        ViewYourCourses(f_id: 0, c_id: 0, c_code: "", c_title: "", f_name: "")
-        Subject(f_id: 1, f_name: "", c_id: 0, c_title: "", c_code: "" , p_id: 0 , t_id: 0, t_name: "")
+//        Subject(f_id: 1, f_name: "", c_id: 0, c_title: "", c_code: "" , p_id: 0 , t_id: 0, t_name: "")
     }
 }
 
@@ -246,9 +246,10 @@ struct ViewYourCourses_Previews: PreviewProvider {
 
 struct Mail: View {
     
-    var fb_details: String
+
     var f_id: Int
     var c_id: Int
+    var fb_details: String
     var c_title: String
     var c_code: String
     var f_name: String
@@ -269,21 +270,25 @@ struct Mail: View {
                     ScrollView {
                         ForEach(feedbackViewModel.feedback.indices, id: \.self) { index in
                             let msg = feedbackViewModel.feedback[index]
-                            VStack {
-                                HStack{
-                                    Text(msg.c_title)
-                                        .foregroundColor(Color.yellow)
-                                        .padding(.horizontal)
-                                    Text(msg.c_code)
-                                        .foregroundColor(Color.yellow)
-                                        .padding(.horizontal)
-                                }
-                                .padding(5)
+                            NavigationLink(destination: MessageDetailView(message: msg)
+                                .navigationBarBackButtonHidden(true)) {
+                                VStack {
+                                    HStack{
+                                        Text(msg.c_title)
+                                            .foregroundColor(Color.yellow)
+                                            .padding(.horizontal)
+                                        Text(msg.c_code)
+                                            .foregroundColor(Color.yellow)
+                                            .padding(.horizontal)
+                                    }
+                                    .padding(5)
                                     Text(msg.fb_details)
                                         .font(.headline)
                                         .foregroundColor(Color.white)
                                         .padding(.horizontal)
+                                }
                             }
+//                            .navigationBarBackButtonHidden(true)
                             Divider()
                                 .background(Color.white)
                                 .padding(2)
@@ -319,6 +324,95 @@ struct Mail: View {
             Image(systemName: "chevron.left")
                 .foregroundColor(.blue)
                 .imageScale(.large)
+        }
+    }
+}
+
+struct MessageDetailView: View {
+    let message: Feedback
+
+    var body: some View {
+        VStack{
+            Text("FeedBack Details")
+                .bold()
+                .font(.largeTitle)
+                .foregroundColor(Color.white)
+            Spacer()
+            Text("\(message.c_title)")
+                .bold()
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity , alignment: .leading)
+                .font(.title2)
+                .foregroundColor(Color.orange)
+            Text("\(message.c_code)")
+                .padding(.horizontal)
+                .font(.title3)
+                .frame(maxWidth: .infinity , alignment: .leading)
+                .foregroundColor(Color.orange)
+//            Spacer()
+            Text("Message : \(message.fb_details)")
+                .bold()
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity , alignment: .leading)
+                .font(.title2)
+                .foregroundColor(Color.yellow)
+            Spacer()
+            VStack {
+                HStack {
+                    Text("Question Verify : ")
+                        .bold()
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity , alignment: .leading)
+                        .font(.title2)
+                        .padding(1)
+                        .foregroundColor(Color.white)
+                    Text(message.q_verification)
+                        .bold()
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity , alignment: .trailing)
+                        .font(.title2)
+                        .foregroundColor(getStatusColor(status: message.q_verification))
+                }
+                HStack {
+                    Text("Paper Status : ")
+                        .bold()
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity , alignment: .leading)
+                        .font(.title2)
+                        .foregroundColor(Color.white)
+                    Text(message.status)
+                        .bold()
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity , alignment: .trailing)
+                        .font(.title2)
+                        .foregroundColor(getStatusColor(status: message.status))
+                }
+            }
+            Spacer()
+        }
+        .navigationBarItems(leading: backButton)
+        .background(Image("fiii").resizable().ignoresSafeArea().aspectRatio(contentMode: .fill))
+    }
+    @Environment(\.presentationMode) var presentationMode
+    private var backButton: some View {
+        Button(action: {
+            presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "chevron.left")
+                .foregroundColor(.blue)
+                .imageScale(.large)
+        }
+    }
+    func getStatusColor(status: String) -> Color {
+        switch status {
+        case "Rejected":
+            return .red
+        case "Approved":
+            return .green
+        case "Pending":
+            return .yellow
+        default:
+            return .white
         }
     }
 }

@@ -7,6 +7,30 @@
 ////
 import Foundation
 
+import Foundation
+
+class EditQuestionViewModel: ObservableObject {
+    @Published var question: GetPaperQuestions
+    @Published var options: [String]
+    @Published var topics: [Topic]
+    @Published var selectedDifficulty: Int
+    @Published var selectedTopic: Int?
+    
+    init(question: GetPaperQuestions, options: [String], topics: [Topic]) {
+        self.question = question
+        self.options = options
+        self.topics = topics
+        self.selectedDifficulty = options.firstIndex(of: question.q_difficulty) ?? 0
+        self.selectedTopic = topics.first { $0.t_id == question.t_id }?.t_id
+    }
+    
+    func saveChanges() {
+        // Add logic to save changes to the database or backend
+    }
+}
+
+
+
 //struct feedback: Hashable , Decodable  ,Encodable {
 //
 //        var fb_details: String
@@ -63,6 +87,8 @@ struct Feedback: Hashable, Decodable, Encodable {
     var f_name: String
     var q_id: Int
     var p_id: Int
+    var q_verification: String
+    var status: String
 }
 
 class FeedbackViewModel: ObservableObject {
@@ -360,30 +386,61 @@ struct TopicTaught: Hashable, Decodable, Encodable {
 class TopicTaughtViewModel: ObservableObject {
     @Published var taught: [TopicTaught] = []
     @Published var commonTopics: [Int: [Int]] = [:]
+    @Published var facultyNames: [Int: [String]] = [:]
 
-    func getTopicTaught(courseID: Int) {
-        guard let url = URL(string: "http://localhost:4000/coveredtopics/\(courseID)") else {
+    func getTopicTaught(courseID: Int, facultyID: Int) {
+        guard let url = URL(string: "http://localhost:4000/coveredtopics/\(courseID)/\(facultyID)") else {
             print("Invalid URL")
             return
         }
-        
+
         URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
                 print("Error: \(error.localizedDescription)")
                 return
             }
-            
+
             guard let data = data else {
                 print("No data received")
                 return
             }
-            
+
             do {
                 let decoder = JSONDecoder()
                 let topics = try decoder.decode([TopicTaught].self, from: data)
                 DispatchQueue.main.async {
                     self.taught = topics
+                }
+            } catch {
+                print("Error decoding data: \(error.localizedDescription)")
+            }
+        }
+        .resume()
+    }
+
+    func getAllTopicTaught(courseID: Int) {
+        guard let url = URL(string: "http://localhost:4000/coveredtopics/\(courseID)") else {
+            print("Invalid URL")
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+
+            do {
+                let decoder = JSONDecoder()
+                let topics = try decoder.decode([TopicTaught].self, from: data)
+                DispatchQueue.main.async {
                     self.commonTopics = self.findCommonTopics(topics: topics)
+                    self.facultyNames = self.getFacultyNames(topics: topics)
                 }
             } catch {
                 print("Error decoding data: \(error.localizedDescription)")
@@ -404,7 +461,115 @@ class TopicTaughtViewModel: ObservableObject {
         }
         return common
     }
+
+    private func getFacultyNames(topics: [TopicTaught]) -> [Int: [String]] {
+        var names: [Int: [String]] = [:]
+        for topic in topics {
+            if names[topic.t_id] == nil {
+                names[topic.t_id] = []
+            }
+            if !names[topic.t_id]!.contains(topic.f_name) {
+                names[topic.t_id]!.append(topic.f_name)
+            }
+        }
+        return names
+    }
+
+    func getCommonFacultyNames(for topicID: Int) -> [String] {
+        return facultyNames[topicID] ?? []
+    }
 }
+
+//    private func findCommonTopics(topics: [TopicTaught]) -> [Int: [Int]] {
+//        var common: [Int: [Int]] = [:]
+//        for topic in topics {
+//            if topic.faculty_count > 1 {
+//                if common[topic.t_id] == nil {
+//                    common[topic.t_id] = []
+//                }
+//                common[topic.t_id]?.append(topic.st_id)
+//            }
+//        }
+//        return common
+//    }
+//
+//    private func getFacultyNames(topics: [TopicTaught]) -> [String] {
+//        var names: [String] = []
+//        for topic in topics {
+//            if !names.contains(topic.f_name) {
+//                names.append(topic.f_name)
+//            }
+//        }
+//        return names
+//    }
+//
+//    func getCommonFacultyNames(for topicID: Int) -> [String] {
+//        guard let commonSubtopicIDs = commonTopics[topicID] else {
+//            return []
+//        }
+//
+//        var commonFacultyNames: [String] = []
+//        for subtopicID in commonSubtopicIDs {
+//            let subtopicTaught = taught.filter { $0.t_id == topicID && $0.st_id == subtopicID }
+//            for teach in subtopicTaught {
+//                if !commonFacultyNames.contains(teach.f_name) {
+//                    commonFacultyNames.append(teach.f_name)
+//                }
+//            }
+//        }
+//        return commonFacultyNames
+//    }
+
+
+
+//class TopicTaughtViewModel: ObservableObject {
+//    @Published var taught: [TopicTaught] = []
+//    @Published var commonTopics: [Int: [Int]] = [:]
+//
+//    func getTopicTaught(courseID: Int) {
+//        guard let url = URL(string: "http://localhost:4000/coveredtopics/\(courseID)") else {
+//            print("Invalid URL")
+//            return
+//        }
+//
+//        URLSession.shared.dataTask(with: url) { (data, response, error) in
+//            if let error = error {
+//                print("Error: \(error.localizedDescription)")
+//                return
+//            }
+//
+//            guard let data = data else {
+//                print("No data received")
+//                return
+//            }
+//
+//            do {
+//                let decoder = JSONDecoder()
+//                let topics = try decoder.decode([TopicTaught].self, from: data)
+//                DispatchQueue.main.async {
+//                    self.taught = topics
+//                    self.commonTopics = self.findCommonTopics(topics: topics)
+//                }
+//            } catch {
+//                print("Error decoding data: \(error.localizedDescription)")
+//            }
+//        }
+//        .resume()
+//    }
+//
+//    private func findCommonTopics(topics: [TopicTaught]) -> [Int: [Int]] {
+//        var common: [Int: [Int]] = [:]
+//        for topic in topics {
+//            if topic.faculty_count > 1 {
+//                if common[topic.t_id] == nil {
+//                    common[topic.t_id] = []
+//                }
+//                common[topic.t_id]?.append(topic.st_id)
+//            }
+//        }
+//        return common
+//    }
+//}
 
 struct CLO: Hashable , Decodable  ,Encodable {
 
@@ -452,6 +617,7 @@ class CLOViewModel: ObservableObject {
 }
 struct TopicCLO: Hashable , Decodable  ,Encodable {
 
+    var clo_id: Int
     var clo_code: String
     
 }

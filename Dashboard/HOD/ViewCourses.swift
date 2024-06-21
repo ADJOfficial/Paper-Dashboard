@@ -112,7 +112,6 @@ struct ViewCourses: View {    // Design 100% OK
         }
     }
     @Environment(\.presentationMode) var presentationMode
-
     private var backButton: some View {
         Button(action: {
             presentationMode.wrappedValue.dismiss()
