@@ -178,7 +178,7 @@ struct PaperQuestions: View {
                                         
                                 }
                                 HStack {
-                                    if let base64Image = cr.q_image,
+                                    if let base64Image = cr.imageData,
                                        let imageData = Data(base64Encoded: base64Image),
                                        let uiImage = UIImage(data: imageData) {
                                         Image(uiImage: uiImage)

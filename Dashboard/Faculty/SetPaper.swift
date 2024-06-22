@@ -39,6 +39,8 @@ struct SetPaper: View {
     
     @State private var showAlert = false
     
+    @StateObject private var activeSessionViewModel = ActiveSessionViewModel()
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -81,7 +83,7 @@ struct SetPaper: View {
                 ScrollView{
                     VStack {
                         HStack{
-                            Text("Teacher")
+                            Text("Teacher :")
                                 .bold()
                                 .padding(.horizontal)
                                 .frame(maxWidth: .infinity , alignment: .leading)
@@ -97,7 +99,7 @@ struct SetPaper: View {
                         .padding(2)
                         
                         HStack{
-                            Text("Course Title")
+                            Text("Course Title :")
                                 .bold()
                                 .padding(.horizontal)
                                 .frame(maxWidth: .infinity , alignment: .leading)
@@ -113,7 +115,7 @@ struct SetPaper: View {
                         .padding(2)
                         
                         HStack{
-                            Text("Course Code")
+                            Text("Course Code :")
                                 .bold()
                                 .padding(.all,1)
                                 .padding(.horizontal)
@@ -196,7 +198,25 @@ struct SetPaper: View {
                             }
                         }
                         .padding(2)
-                            
+                    
+                        HStack{
+                            Text("Session : ")
+                                .font(.title2)
+                                .foregroundColor(Color.white)
+                                .frame(maxWidth: .infinity , alignment: .leading)
+                            Text(activeSessionViewModel.activeSessionName)
+                                .font(.title2)
+                                .foregroundColor(Color.green)
+                            Text(activeSessionViewModel.activeSessionYear)
+                                .font(.title2)
+                                .foregroundColor(Color.yellow)
+                        }
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity , alignment: .trailing)
+                        .onAppear {
+                            activeSessionViewModel.getActiveSession()
+                        }
+                        .padding(1)
 //                            VStack{
 //                                Text("Semester :")
 //                                    .bold()
@@ -370,7 +390,7 @@ struct StartMakingPaper: View {
    
 
 //    @State private var selectedClo: Int?
-    @State private var selectedTopic: Int?
+    @State private var selectedTopics = Set<Int>()
     
     @State private var selectedImage: UIImage?
     @State private var isShowingImagePicker = false
@@ -480,28 +500,43 @@ struct StartMakingPaper: View {
                         .accentColor(Color.green)
                         Spacer()
                         Text("Topic :")
+                            .padding(.horizontal)
                             .foregroundColor(Color.white)
-                        Picker(selection: $selectedTopic, label: Text("")) {
-                            Text("Topics").tag(nil as Int?)
+                        Menu {
                             ForEach(topicViewModel.existing, id: \.t_id) { topic in
-                                Text(topic.t_name)
-                                    .tag(topic.t_id as Int?)
-                            }
-                        }
-                        .accentColor(Color.green)
-                        .onChange(of: (selectedTopic)) { selectedTopicID in
-                            if let selectedTopicID = selectedTopicID {
-                                print("Selected topic ID: \(selectedTopicID)")
-                                topiccloViewModel.getTopicCLO(topicID: selectedTopicID)
-                                ForEach(topiccloViewModel.topicCLO, id: \.self) { clo in
-//                                    print("Selected topic ID: \(clo.clo_code)")
-                                    Text(clo.clo_code)
-                                        .foregroundColor(Color.white)
-                                    
+                                Button(action: {
+                                    if selectedTopics.contains(topic.t_id) {
+                                        selectedTopics.remove(topic.t_id)
+                                    } else {
+                                        selectedTopics.insert(topic.t_id)
+                                    }
+                                    topiccloViewModel.getTopicCLO(topicID: topic.t_id)
+                                }) {
+                                    HStack {
+                                        Text(topic.t_name)
+                                        Spacer()
+                                        if selectedTopics.contains(topic.t_id) {
+                                            Image(systemName: "checkmark")
+                                        }
+                                    }
                                 }
                             }
+                        } label: {
+                            Text("Select")
+                                .foregroundColor(.green)
+                                .padding()
+//                                .background(Color.green)
+                                .cornerRadius(8)
                         }
                     }
+//                    VStack{
+//                        ForEach(topiccloViewModel.topicCLO, id: \.self) { clo in
+//                            HStack{
+//                                Text(clo.clo_code)
+//                                    .foregroundColor(Color.white)
+//                            }
+//                        }
+//                    }
                     HStack {
                         Spacer()
                         
@@ -551,12 +586,7 @@ struct StartMakingPaper: View {
                                 let cr = questionViewModel.uploadedQuestions[index]
                                 VStack {
                                     NavigationLink{
-                                        let editViewModel = EditQuestionViewModel(
-                                            question: cr,
-                                            options: ["Easy", "Medium", "Hard"], // Replace with actual options
-                                            topics: topicViewModel.existing
-                                        )
-                                        EditPaperQuestion(viewModel: editViewModel)
+                                        EditPaperQuestion(f_id:f_id , p_id: p_id , c_id: c_id , c_title: c_title , c_code: c_code , questions: cr)
                                             .navigationBarBackButtonHidden(true)
                                     }label: {
                                         Image(systemName: "square.and.pencil.circle")
@@ -573,30 +603,41 @@ struct StartMakingPaper: View {
                                             .font(.headline)
                                             .foregroundColor(Color.white)
                                             .frame(maxWidth: .infinity , alignment: .leading)
-                                        Text("[ \(cr.q_difficulty) , \(cr.q_marks) , \(cr.t_name) , \(cr.clo_code) ]")
-                                            .foregroundColor(Color.yellow)
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                            .onTapGesture {
-                                                // Toggle showPopover to true
-                                                showPopover.toggle()
+                                        HStack {
+                                            if let imageDataString = cr.imageData, let imageData = Data(base64Encoded: imageDataString), let uiImage = UIImage(data: imageData) {
+                                                Image(uiImage: uiImage)
+                                                    .resizable()
+                                                    .cornerRadius(30)
+                                                    .frame(width: 100, height: 100) // Adjust size as needed
+                                            } else {
+                                                Text("Image not available")
                                             }
-                                            .overlay(
-                                                Group {
-                                                    if showPopover {
-                                                        VStack {
-                                                            Text("\(cr.clo_code) : \(cr.clo_text)")
-                                                                .padding()
-                                                                .foregroundColor(Color.black)
-                                                                .background(Color.gray.opacity(1))
-                                                                .cornerRadius(10)
-                                                        }
-                                                        .onTapGesture {
-                                                            // Toggle showPopover to false when tapped outside the popover
-                                                            showPopover.toggle()
+                                            
+                                            Text("[ \(cr.q_difficulty) , \(cr.q_marks) , \(cr.t_name) , \(cr.clo_code) ]")
+                                                .foregroundColor(Color.yellow)
+                                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                                .onTapGesture {
+                                                    // Toggle showPopover to true
+                                                    showPopover.toggle()
+                                                }
+                                                .overlay(
+                                                    Group {
+                                                        if showPopover {
+                                                            VStack {
+                                                                Text("\(cr.clo_code) : \(cr.clo_text)")
+                                                                    .padding()
+                                                                    .foregroundColor(Color.black)
+                                                                    .background(Color.gray.opacity(1))
+                                                                    .cornerRadius(10)
+                                                            }
+                                                            .onTapGesture {
+                                                                // Toggle showPopover to false when tapped outside the popover
+                                                                showPopover.toggle()
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            )
+                                                )
+                                        }
                                     }
                                     Divider()
                                         .background(Color.white)
@@ -652,64 +693,55 @@ struct StartMakingPaper: View {
         }
     }
     func createQuestion() {
-        guard let url = URL(string: "http://localhost:4000/ifimageornot") else {
+        guard let url = URL(string: "http://localhost:4000/createquestion") else {
             return
         }
-        
-        guard selectedTopic != 0 else {
+
+        guard !selectedTopics.isEmpty else {
             print("No topic selected")
             return
         }
 
-        let selectedTopicID = selectedTopic
-
-        guard let selectTopic = topicViewModel.existing.first(where: { Int($0.t_id) == selectedTopicID }) else {
-            print("Selected topic not found")
+        guard let selectTopic = topicViewModel.existing.first(where: { selectedTopics.contains(Int($0.t_id)) }) else {
+            print("No topic selected")
             return
         }
-//        guard selectedClo != 0 else {
-//            print("No CLO selected")
-//            return
-//        }
-//
-//        let selectedCLOID = selectedClo
-//
-//        guard let selectClo = cloViewModel.existing.first(where: { Int($0.clo_id) == selectedCLOID }) else {
-//            print("Selected CLO not found")
-//            return
-//        }
+
         guard let selectClo = topiccloViewModel.topicCLO.first else {
             print("CLO not found for selected topic")
             return
         }
+
+        let concatenatedTopicIDs = selectedTopics.map { String($0) }.joined(separator: ",") // Convert to comma-separated string
+
         let question = [
             "q_text": questions,
             "q_marks": q_marks,
             "q_difficulty": options[selectedDifficulty],
-            "t_id": selectTopic.t_id,
+            "t_id": concatenatedTopicIDs,  // Use the concatenated string of topic IDs
             "p_id": p_id,
             "f_id": f_id,
             "c_id": c_id,
             "clo_id": selectClo.clo_id
         ] as [String: Any]
-        
+
         let boundary = UUID().uuidString
         let boundaryPrefix = "--\(boundary)\r\n"
         let boundarySuffix = "--\(boundary)--\r\n"
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        
+
         var bodyData = Data()
-        
+
         // Add question fields to the request body
         for (key, value) in question {
             bodyData.appendString(boundaryPrefix)
             bodyData.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
             bodyData.appendString("\(value)\r\n")
         }
-        
+
         // Add image file to the request body
         if let image = selectedImage, let imageData = image.jpegData(compressionQuality: 0.8) {
             bodyData.appendString(boundaryPrefix)
@@ -718,11 +750,11 @@ struct StartMakingPaper: View {
             bodyData.append(imageData)
             bodyData.appendString("\r\n")
         }
-        
+
         bodyData.appendString(boundarySuffix)
-        
+
         request.httpBody = bodyData
-        
+
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
@@ -735,10 +767,10 @@ struct StartMakingPaper: View {
                         selectedDifficulty = 0
                         q_marks = ""
                         selectedImage = nil
-//                        selectedClo = nil
-                        selectedTopic = nil
+                        // selectedClo = nil
+                        selectedTopics = Set<Int>()
                     }
-                    
+
                 } catch {
                     print("Error parsing JSON:", error)
                 }
@@ -747,6 +779,7 @@ struct StartMakingPaper: View {
             }
         }.resume()
     }
+
     func handleImagePickerResult(result: Result<UIImage, Error>) {
         switch result {
         case .success(let image):
@@ -816,3 +849,17 @@ struct SetPaper_Previews: PreviewProvider {
         StartMakingPaper(f_id: 1, f_name: "", c_id: 1, c_title: "", c_code: "", paperName: "", exam_date: "", degree: "", duration: 0, totalMarks: 0, p_id: 26, t_id: 1)
     }
 }
+
+
+
+//        guard selectedClo != 0 else {
+//            print("No CLO selected")
+//            return
+//        }
+//
+//        let selectedCLOID = selectedClo
+//
+//        guard let selectClo = cloViewModel.existing.first(where: { Int($0.clo_id) == selectedCLOID }) else {
+//            print("Selected CLO not found")
+//            return
+//        }

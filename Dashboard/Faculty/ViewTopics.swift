@@ -142,7 +142,7 @@ struct ViewTopics: View { // Design 100% Ok
                         createTopic()
                         for cloID in selectedCLOs {
                             if let cloIDInt = cloID as? Int {
-                                createCLO_Topic_map(cloIDs: [cloIDInt], topicID: t_id)
+                                createCLO_Topic_map(cloID: [cloIDInt], topicID: t_id)
                             }
                         }
                     }
@@ -172,7 +172,7 @@ struct ViewTopics: View { // Design 100% Ok
                                     .foregroundColor(Color.white)
                                     .frame(maxWidth: .infinity , alignment: .leading)
                                 NavigationLink{
-                                    EditTopics(f_id: f_id, c_id: c_id , c_title: c_title, topic: cr)
+                                    EditTopics(f_id: f_id, c_id: c_id, c_title: c_title, topic: cr, cloViewModel: cloViewModel, selectedCLOs: selectedCLOs)
                                         .navigationBarBackButtonHidden(true)
                                 }label: {
                                     Image(systemName: "square.and.pencil.circle")
@@ -259,7 +259,7 @@ struct ViewTopics: View { // Design 100% Ok
                 do {
                     if let result = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                        let topicID = result["t_id"] as? Int {
-                        self.createCLO_Topic_map(cloIDs: self.selectedCLOs, topicID: topicID)
+                        self.createCLO_Topic_map(cloID: self.selectedCLOs, topicID: topicID)
                     }
                     self.topicViewModel.getCourseTopic(courseID: self.c_id) // Refresh topics after creating a new one
                     self.showAlert = true
@@ -274,13 +274,13 @@ struct ViewTopics: View { // Design 100% Ok
             }
         }.resume()
     }
-    func createCLO_Topic_map(cloIDs: [Int], topicID: Int) {
+    func createCLO_Topic_map(cloID: [Int], topicID: Int) {
         guard let url = URL(string: "http://localhost:4000/clotopicmap") else {
             return
         }
         
         let parameters: [String: Any] = [
-            "clo_id": cloIDs, // Assuming cloID is a single value
+            "clo_id": cloID,
             "t_id": topicID
         ]
         
@@ -341,123 +341,107 @@ struct ViewTopics: View { // Design 100% Ok
         }.resume()
     }
 }
-        
-//    func createTopic() {
-//        guard let url = URL(string: "http://localhost:4000/addtopic") else {
-//            return
-//        }
-//
-//        let user = [
-//            "c_id": c_id,
-//            "t_name": t_name
-//        ] as [String : Any]
-//
-//        guard let jsonData = try? JSONSerialization.data(withJSONObject: user) else {
-//            return
-//        }
-//
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "POST"
-//        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        request.httpBody = jsonData
-//
-//        URLSession.shared.dataTask(with: request) { data, response, error in
-//            if let data = data {
-//                do {
-//                    let result = try JSONSerialization.jsonObject(with: data)
-//                    print("Result from server:", result)
-//                    topicViewModel.getCourseTopic(courseID: c_id)// Refresh faculties after creating a new one
-//                    showAlert = true
-//                    DispatchQueue.main.async {
-//                        t_name = ""
-//                    }
-//                } catch {
-//                    print("Error parsing JSON:", error)
-//                }
-//            } else if let error = error {
-//                print("Error making request:", error)
-//            }
-//        }.resume()
-//    }
-struct EditTopics: View { // Design 100% Ok
-    
+struct EditTopics: View {
     var f_id: Int
     var c_id: Int
     var c_title: String
-    
     var topic: Topic
-    
+    @ObservedObject var cloViewModel: CLOViewModel
+    @State var selectedCLOs: [Int]
+
     @State private var edittopicname = ""
-    
     @State private var showAlert = false
-    
-    
-    var body: some View { // Get All Data From Node MongoDB : Pending
-        
-        VStack{
+    @State private var selectedCLOText: String = ""
+    @State private var showCloTextAlert: Bool = false
+
+    var body: some View {
+        VStack {
             Text("Edit Topic")
                 .bold()
                 .font(.largeTitle)
                 .foregroundColor(Color.white)
             Spacer()
-            VStack{
+            VStack {
                 Spacer()
                 Text("Course")
                     .bold()
                     .padding(.horizontal)
-                    .frame(maxWidth: .infinity , alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.title2)
                     .foregroundColor(Color.white)
                 Text("\(c_title)")
                     .padding()
-                    .frame(maxWidth: .infinity , alignment: .center)
+                    .frame(maxWidth: .infinity, alignment: .center)
                     .font(.title3)
                     .foregroundColor(Color.white)
-                    .onAppear{
+                    .onAppear {
                         edittopicname = topic.t_name
+                        cloViewModel.getCourseCLO(courseID: c_id)
                     }
                 Text("Topic")
                     .bold()
                     .padding()
                     .font(.title2)
-                    .frame(maxWidth: .infinity , alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(Color.white)
-                TextField("Edit Topic Name" , text:$edittopicname)
+                TextField("Edit Topic Name", text: $edittopicname)
                     .padding()
                     .background(Color.gray.opacity(1))
                     .cornerRadius(8)
                     .frame(width: 400)
-                    .onAppear{
+                    .onAppear {
                         edittopicname = topic.t_name
                     }
-//                Text("CLOs")
-//                    .bold()
-//                    .padding()
-//                    .font(.title2)
-//                    .foregroundColor(Color.white)
-//                    .frame(maxWidth: .infinity , alignment: .leading)
-//                HStack {
-//                    Spacer()
-//                    Text("CLO:1")
-//                    Image(systemName: "square")
-//                    Text("CLO:2")
-//                    Image(systemName: "checkmark.square")
-//                        .foregroundColor(.green)
-//                    Text("CLO:3")
-//                    Image(systemName: "square")
-//                    Text("CLO:4")
-//                    Image(systemName: "checkmark.square")
-//                        .foregroundColor(.green)
-//                    Spacer()
-//                }
-                .padding()
-                .font(.title3)
-                .foregroundColor(.white)
+                    .padding()
+                    .font(.title3)
+                    .foregroundColor(.white)
+
+                // Display CLOs
+                VStack {
+                    HStack {
+                        ForEach(cloViewModel.existing, id: \.self) { cr in
+                            HStack {
+                                Button(action: {
+                                    if selectedCLOs.contains(cr.clo_id) {
+                                        selectedCLOs.removeAll { $0 == cr.clo_id }
+                                    } else {
+                                        selectedCLOs.append(cr.clo_id)
+                                    }
+                                }) {
+                                    HStack {
+                                        Image(systemName: selectedCLOs.contains(cr.clo_id) ? "checkmark.square" : "square")
+                                            .foregroundColor(selectedCLOs.contains(cr.clo_id) ? .green : .gray)
+                                        Text(cr.clo_code)
+                                            .font(.headline)
+                                            .foregroundColor(Color.white)
+                                            .gesture(TapGesture(count: 1)
+                                                .onEnded {
+                                                    selectedCLOText = cr.clo_text
+                                                    DispatchQueue.main.async {
+                                                        showCloTextAlert = true
+                                                    }
+                                                }
+                                            )
+                                    }
+                                }
+                                .padding(5)
+                            }
+                        }
+                        if cloViewModel.existing.isEmpty {
+                            Text("No CLO Found For Course - \(c_title)")
+                                .font(.headline)
+                                .foregroundColor(.orange)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                }
+
                 Spacer()
             }
-            Button("Update"){
+            Button("Update") {
                 updateTopic()
-                showAlert
+                showAlert = true
             }
             .bold()
             .padding()
@@ -473,7 +457,11 @@ struct EditTopics: View { // Design 100% Ok
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Congratulations"), message: Text("Topic Updated Successfully"), dismissButton: .default(Text("OK")))
         }
+        .alert(isPresented: $showCloTextAlert) {
+            Alert(title: Text("CLO Text"), message: Text(selectedCLOText), dismissButton: .default(Text("OK")))
+        }
     }
+
     func updateTopic() {
         guard let url = URL(string: "http://localhost:4000/updatetopic/\(topic.t_id)") else {
             return
@@ -499,16 +487,16 @@ struct EditTopics: View { // Design 100% Ok
             print("Response Data: \(String(data: data, encoding: .utf8) ?? "")")
 
             do {
-                    let responseJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-                    if let message = responseJSON?["message"] as? String, message == "Topic record updated successfully" {
-                        print("Topic updated successfully")
-                        showAlert = true
-                    } else {
-                        print("Error: Topic record not updated")
-                    }
-                } catch {
-                    print("Error while decoding response data: \(error)")
+                let responseJSON = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+                if let message = responseJSON?["message"] as? String, message == "Topic record updated successfully" {
+                    print("Topic updated successfully")
+                    showAlert = true
+                } else {
+                    print("Error: Topic record not updated")
                 }
+            } catch {
+                print("Error while decoding response data: \(error)")
+            }
         }
         task.resume()
     }

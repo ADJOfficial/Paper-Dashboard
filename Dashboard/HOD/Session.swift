@@ -13,6 +13,7 @@ struct Session: View { // Design 100% Ok
     @State private var sessionYear = ""
     @State private var searchText = ""
     @StateObject private var sessionViewModel = SessionViewModel()
+    @StateObject private var activeSessionViewModel = ActiveSessionViewModel()
     
     @State private var showAlert = false
     
@@ -48,6 +49,19 @@ struct Session: View { // Design 100% Ok
                     .font(.largeTitle)
                     .foregroundColor(Color.white)
                 Spacer()
+                HStack{
+                    Text(activeSessionViewModel.activeSessionName)
+                        .font(.title2)
+                        .foregroundColor(Color.green)
+                    Text(activeSessionViewModel.activeSessionYear)
+                        .font(.title2)
+                        .foregroundColor(Color.yellow)
+                }
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity , alignment: .trailing)
+                .onAppear {
+                    activeSessionViewModel.getActiveSession()
+                }
                 VStack {
                     Text("Session Name")
                         .padding(.horizontal)
@@ -327,7 +341,7 @@ struct EditSession: View { // Design 100% Ok
             return
         }
 
-        let updatedSession = ManageSession(s_id: session.s_id, s_name: sessionName, s_year: Int(sessionYear) ?? 0, status: session.status)
+        let updatedSession = ManageSession(s_id: session.s_id, s_name: sessionName, s_year: sessionYear , status: session.status)
 
         guard let encodedData = try? JSONEncoder().encode(updatedSession) else {
             return

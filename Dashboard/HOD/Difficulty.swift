@@ -12,6 +12,7 @@ struct Difficulty: View {
     @State private var easy = ""
     @State private var medium = ""
     @State private var hard = ""
+    @State private var totalQuestions = ""
     
     @State private var showAlert = false
     
@@ -86,17 +87,30 @@ struct Difficulty: View {
                 }
                 
                 Spacer()
-                Button("Save"){
-                    createDifficulty()
-                    showAlert
+                VStack{
+                    Text("Total Questions")
+                        .bold()
+                        .padding(.horizontal)
+                        .font(.title3)
+                        .foregroundColor(Color.green)
+                        .frame(maxWidth: .infinity , alignment: .leading)
+                    TextField("Total" , text: $totalQuestions)
+                        .padding()
+                        .frame(width: 250, height: 40)
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(10)
+                    Button("Save"){
+                        createDifficulty()
+                        showAlert
+                    }
+                    .bold()
+                    .padding()
+                    .frame(width: 150)
+                    .foregroundColor(.black)
+                    .background(Color.teal)
+                    .cornerRadius(8)
+//                    Spacer()
                 }
-                .bold()
-                .padding()
-                .frame(width: 150)
-                .foregroundColor(.black)
-                .background(Color.teal)
-                .cornerRadius(8)
-                Spacer()
             }
             Spacer()
         }
@@ -124,7 +138,8 @@ struct Difficulty: View {
         let user = [
             "easy": easy,
             "medium": medium,
-            "hard": hard
+            "hard": hard,
+            "totalquestions": totalQuestions
         ] as [String : Any]
 
         guard let jsonData = try? JSONSerialization.data(withJSONObject: user) else {
@@ -146,6 +161,7 @@ struct Difficulty: View {
                         easy = ""
                         medium = ""
                         hard = ""
+                        totalQuestions = ""
                     }
                 } catch {
                     print("Error parsing JSON:", error)

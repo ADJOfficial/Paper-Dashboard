@@ -130,7 +130,7 @@ class UploadedPaperViewModel: ObservableObject {
 struct GetPaperQuestions: Hashable, Decodable, Encodable {
     var q_id: Int
     var q_text: String
-    var q_image: String?
+    var imageData: String?
     var q_marks: Int
     var q_difficulty: String
     var q_verification: String
@@ -152,7 +152,7 @@ class QuestionViewModel: ObservableObject {
     @Published var selectedQuestionIndex: Int?
     
     func getPaperQuestions(paperID: Int) {
-        guard let url = URL(string: "http://localhost:3000/getpaperquestion/\(paperID)") else {
+        guard let url = URL(string: "http://localhost:3000/getquestion/\(paperID)") else {
             print("Invalid URL")
             return
         }

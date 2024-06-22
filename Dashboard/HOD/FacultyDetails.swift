@@ -125,6 +125,7 @@ struct FacultyDetails: View { // Designed 100% OK
 struct EyeAssignedCousres: View {  // Design 100% ok
     
     @StateObject private var assignedcoursesViewModel = AssignedCoursesViewModel()
+    @StateObject private var activeSessionViewModel = ActiveSessionViewModel()
     
     var facultyID: Int
     var facultyName: String
@@ -148,12 +149,27 @@ struct EyeAssignedCousres: View {  // Design 100% ok
                     .font(.title2)
                     .frame(maxWidth: .infinity , alignment: .center)
                     .foregroundColor(Color.teal)
-                Text("Assigned Courses")
-                    .underline()
-                    .font(.title2)
-                    .foregroundColor(Color.white)
+                HStack{
+                    Text("Assigned Courses")
+                        .underline()
+                        .font(.title2)
+                        .foregroundColor(Color.white)
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity , alignment: .leading)
+                    HStack{
+                        Text(activeSessionViewModel.activeSessionName)
+                            .font(.title2)
+                            .foregroundColor(Color.green)
+                        Text(activeSessionViewModel.activeSessionYear)
+                            .font(.title2)
+                            .foregroundColor(Color.yellow)
+                    }
                     .padding(.horizontal)
-                    .frame(maxWidth: .infinity , alignment: .leading)
+                    .frame(maxWidth: .infinity , alignment: .trailing)
+                    .onAppear {
+                        activeSessionViewModel.getActiveSession()
+                    }
+                }
                 VStack{
                     ScrollView{
                         ForEach(assignedcoursesViewModel.assignedCourses, id: \.self) { cr in
@@ -248,6 +264,8 @@ struct PlusAssignCourse: View { // Design 100% ok
     
     @StateObject private var coursesViewModel = CoursesViewModel()
     @StateObject private var assignedcoursesViewModel = AssignedCoursesViewModel()
+    @StateObject private var activeSessionViewModel = ActiveSessionViewModel()
+    
     var facultyID: Int
 //    var courseID: Int
     var facultyName: String
@@ -313,6 +331,19 @@ struct PlusAssignCourse: View { // Design 100% ok
                 
                 SearchBar(text: $searchText)
             Spacer()
+            HStack{
+                Text(activeSessionViewModel.activeSessionName)
+                    .font(.title2)
+                    .foregroundColor(Color.green)
+                Text(activeSessionViewModel.activeSessionYear)
+                    .font(.title2)
+                    .foregroundColor(Color.yellow)
+            }
+            .padding(.horizontal)
+            .frame(maxWidth: .infinity , alignment: .trailing)
+            .onAppear {
+                activeSessionViewModel.getActiveSession()
+            }
             VStack{
                 ScrollView{
                     ForEach(filteredcourse, id: \.self) { cr in

@@ -331,7 +331,7 @@ struct ManageSession: Hashable , Decodable  ,Encodable {
 
     var s_id: Int
     var s_name: String
-    var s_year: Int
+    var s_year: String
     var status: Int
     
 }
@@ -368,5 +368,52 @@ class SessionViewModel: ObservableObject {
             }
         }
         task.resume()
+    }
+}
+
+
+struct ActiveSession: Decodable {
+    var s_name: String
+    var s_year: String
+}
+
+class ActiveSessionViewModel: ObservableObject {
+    
+    @Published var activeSessionName: String = ""
+    @Published var activeSessionYear: String = ""
+    
+    func getActiveSession() {
+        guard let url = URL(string: "http://localhost:2000/getactivesession") else {
+            print("Invalid URL")
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error.localizedDescription)")
+                return
+            }
+
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+
+            do {
+                let decoder = JSONDecoder()
+                let sessions = try decoder.decode([ActiveSession].self, from: data)
+                if let activeSession = sessions.first {
+                    DispatchQueue.main.async {
+                        self.activeSessionName = activeSession.s_name
+                        self.activeSessionYear = activeSession.s_year
+                    }
+                } else {
+                    print("No active session found")
+                }
+            } catch {
+                print("Error decoding data: \(error.localizedDescription)")
+            }
+        }
+        .resume()
     }
 }

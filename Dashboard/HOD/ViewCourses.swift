@@ -128,6 +128,7 @@ struct ViewCourses: View {    // Design 100% OK
 struct CourseAssignedTo: View {  // Design 100% ok
     
     @StateObject private var coViewModel = CoViewModel()
+    @StateObject private var activeSessionViewModel = ActiveSessionViewModel()
 //    var facultyID: Int
     var c_id: Int
     var c_title: String
@@ -161,6 +162,19 @@ struct CourseAssignedTo: View {  // Design 100% ok
                     .foregroundColor(Color.white)
                     .padding(.horizontal)
                     .frame(maxWidth: .infinity , alignment: .leading)
+                HStack{
+                    Text(activeSessionViewModel.activeSessionName)
+                        .font(.title2)
+                        .foregroundColor(Color.green)
+                    Text(activeSessionViewModel.activeSessionYear)
+                        .font(.title2)
+                        .foregroundColor(Color.yellow)
+                }
+                .padding(.horizontal)
+                .frame(maxWidth: .infinity , alignment: .trailing)
+                .onAppear {
+                    activeSessionViewModel.getActiveSession()
+                }
                 VStack{
                     ScrollView{
                         ForEach(coViewModel.Courseassignedto, id: \.self) { cr in
