@@ -40,6 +40,7 @@ struct SetPaper: View {
     @State private var showAlert = false
     
     @StateObject private var activeSessionViewModel = ActiveSessionViewModel()
+    @StateObject private var coViewModel = CoViewModel()
     
     var body: some View {
         NavigationView {
@@ -89,14 +90,21 @@ struct SetPaper: View {
                                 .frame(maxWidth: .infinity , alignment: .leading)
                                 .font(.title3)
                                 .foregroundColor(Color.white)
-                            Text("\(f_name)")
-                                .bold()
-                                .padding(.horizontal)
-                                .frame(maxWidth: .infinity , alignment: .center)
-                                .font(.title3)
-                                .foregroundColor(Color.white)
+                            ScrollView{
+                                ForEach(coViewModel.Courseassignedto, id: \.self) { cr in
+                                    HStack{
+                                        Text(cr.f_name)
+                                            .font(.headline)
+                                            .foregroundColor(Color.white)
+                                            .frame(maxWidth: .infinity , alignment: .leading)
+                                    }
+                                }
+                            }
                         }
                         .padding(2)
+                        .onAppear {
+                            coViewModel.fetchCoursesAssignedTo(courseID: c_id)
+                        }
                         
                         HStack{
                             Text("Course Title :")
@@ -109,7 +117,7 @@ struct SetPaper: View {
                                 .bold()
                                 .padding(.horizontal)
                                 .frame(maxWidth: .infinity , alignment: .center)
-                                .font(.title3)
+                                .font(.headline)
                                 .foregroundColor(Color.white)
                         }
                         .padding(2)
@@ -126,7 +134,7 @@ struct SetPaper: View {
                                 .bold()
                                 .padding(.horizontal)
                                 .frame(maxWidth: .infinity , alignment: .center)
-                                .font(.title3)
+                                .font(.headline)
                                 .foregroundColor(Color.white)
                         }
                         .padding(2)
@@ -163,6 +171,21 @@ struct SetPaper: View {
                         
                         HStack {
                             Text("Date of Exam :")
+                                .bold()
+                                .padding(.horizontal)
+                                .frame(maxWidth: .infinity , alignment: .leading)
+                                .font(.title3)
+                                .foregroundColor(Color.white)
+                            TextField("" , text: $paperSetting.examDate)
+                                .background(Color.gray.opacity(0.8))
+                                .cornerRadius(8)
+                                .frame(width: 180 , height: 20)
+                                .padding(.horizontal)
+                        }
+                        .padding(2)
+                        
+                        HStack {
+                            Text("Question :")
                                 .bold()
                                 .padding(.horizontal)
                                 .frame(maxWidth: .infinity , alignment: .leading)
@@ -217,33 +240,6 @@ struct SetPaper: View {
                             activeSessionViewModel.getActiveSession()
                         }
                         .padding(1)
-//                            VStack{
-//                                Text("Semester :")
-//                                    .bold()
-//                                    .padding(.horizontal)
-//                                    .frame(maxWidth: .infinity , alignment: .leading)
-//                                    .font(.title3)
-//                                    .foregroundColor(Color.white)
-//                                HStack{
-//                                    Spacer()
-//                                    SemesterRadioButton(title: "Fall", isSelected: selectedSemRadioButton == "Fall") {
-//                                        selectedSemRadioButton = "Fall"
-//                                    }
-//                                    .foregroundColor(selectedSemRadioButton == "Fall" ? .green : .white)
-//                                    Spacer()
-//                                    SemesterRadioButton(title: "Spring", isSelected: selectedSemRadioButton == "Spring") {
-//                                        selectedSemRadioButton = "Spring"
-//                                    }
-//                                    .foregroundColor(selectedSemRadioButton == "Spring" ? .green : .white)
-//                                    Spacer()
-//                                    SemesterRadioButton(title: "Summer", isSelected: selectedSemRadioButton == "Summer") {
-//                                        selectedSemRadioButton = "Summer"
-//                                    }
-//                                    .foregroundColor(selectedSemRadioButton == "Summer" ? .green : .white)
-//                                    Spacer()
-//                                }
-//                            }
-//                            .padding(2)
                     }
                     .padding()
                 }
@@ -271,7 +267,8 @@ struct SetPaper: View {
                     Spacer()
                     
                     NavigationLink{
-                        StartMakingPaper(f_id: f_id, f_name: f_name, c_id: c_id, c_title: c_title, c_code: c_code,paperName: paperSetting.paperName , exam_date: paperSetting.examDate , degree: paperSetting.degree , duration: paperSetting.duration , totalMarks: paperSetting.totalMarks, p_id: p_id, t_id: 0)
+                        StartMakingPaper(f_id: f_id, f_name: f_name, c_id: c_id, c_title: c_title, c_code: c_code)
+                            .navigationBarBackButtonHidden(true)
                     }label: {
                         Image(systemName: "arrow.right.square.fill")
                             .bold()
@@ -369,17 +366,8 @@ struct StartMakingPaper: View {
     var c_id: Int
     var c_title: String
     var c_code: String
-    var paperName: String
-    var exam_date: String
-    var degree: String
-    var duration: Int
-    var totalMarks: Int
-    var p_id: Int
-    var t_id: Int
-//    var status: String
-    
-//    @StateObject private var uploadedpaperViewModel = UploadedPaperViewModel()
-//    @State private var paperStatus: String = ""
+    @State private var paperID: Int?
+
     
     @State private var showAlert = false
     @State private var showPopover = false
@@ -403,6 +391,7 @@ struct StartMakingPaper: View {
     @StateObject private var  topicViewModel = TopicViewModel()
     @StateObject private var  cloViewModel = CLOViewModel()
     @StateObject private var  topiccloViewModel = TopicCLOViewModel()
+    @StateObject private var  paperheaderViewModel = PaperHeaderViewModel()
     
     
     var body: some View {
@@ -427,43 +416,28 @@ struct StartMakingPaper: View {
                         .foregroundColor(Color.green)
                     
                 }
-                ScrollView{
-                    VStack{
-                        HStack{
-                            Text("Course Title: \(c_title)")
-                                .bold()
-                                .padding(.all,1)
-                                .frame(maxWidth: .infinity , alignment: .leading)
-                            Text("Course Code: \(c_code)")
-                                .bold()
-                                .padding(.all,1)
-                                .frame(maxWidth: .infinity , alignment: .leading)
+                VStack{
+                    ScrollView {
+                        ForEach(paperheaderViewModel.header.indices, id: \.self) { index in
+                            let cr = paperheaderViewModel.header[index]
+                            VStack{
+                                Text("\(cr.p_id)")
+                                    .bold()
+                                    .padding(.all,1)
+                                    .frame(maxWidth: .infinity , alignment: .center)
+                                    .onAppear {
+                                        self.paperID = cr.p_id // Store the fetched p_id
+                                    }
+                            }
                         }
-                        HStack{
-                            Text("Date of Exam: \(exam_date)")
-                                .bold()
-                                .padding(.all,1)
-                                .frame(maxWidth: .infinity , alignment: .leading)
-                            Text("Duration: \(duration)")
-                                .bold()
-                                .padding(.all,1)
-                                .frame(maxWidth: .infinity , alignment: .leading)
-                        }
-                        HStack{
-                            Text("Degree Program: \(degree)")
-                                .bold()
-                                .padding(.all,1)
-                                .frame(maxWidth: .infinity , alignment: .leading)
-                            Text("Total Marks: \(totalMarks)")
-                                .bold()
-                                .padding(.all,1)
-                                .frame(maxWidth: .infinity , alignment: .leading)
+                        if paperheaderViewModel.header.isEmpty {
+                            Text("No Header Found For Course - \(c_title)")
+                                .font(.headline)
+                                .foregroundColor(.orange)
+                                .padding()
+                                .frame(maxWidth: .infinity)
                         }
                     }
-                    Text("Teacher Name: \(f_name)")
-                        .bold()
-                        .padding(.all,1)
-                        .frame(maxWidth: .infinity , alignment: .center)
                 }
                 .padding()
                 .frame(height: 150)
@@ -472,6 +446,9 @@ struct StartMakingPaper: View {
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(Color.green.opacity(0.5), lineWidth: 2)
                 )
+                .onAppear{
+                    paperheaderViewModel.fetchExistingHeader(course: c_id)
+                }
                 VStack{
                     HStack{
                         Text("Question")
@@ -525,18 +502,18 @@ struct StartMakingPaper: View {
                             Text("Select")
                                 .foregroundColor(.green)
                                 .padding()
-//                                .background(Color.green)
+                            //                                .background(Color.green)
                                 .cornerRadius(8)
                         }
                     }
-//                    VStack{
-//                        ForEach(topiccloViewModel.topicCLO, id: \.self) { clo in
-//                            HStack{
-//                                Text(clo.clo_code)
-//                                    .foregroundColor(Color.white)
-//                            }
-//                        }
-//                    }
+                    //                    VStack{
+                    //                        ForEach(topiccloViewModel.topicCLO, id: \.self) { clo in
+                    //                            HStack{
+                    //                                Text(clo.clo_code)
+                    //                                    .foregroundColor(Color.white)
+                    //                            }
+                    //                        }
+                    //                    }
                     HStack {
                         Spacer()
                         
@@ -586,8 +563,8 @@ struct StartMakingPaper: View {
                                 let cr = questionViewModel.uploadedQuestions[index]
                                 VStack {
                                     NavigationLink{
-                                        EditPaperQuestion(f_id:f_id , p_id: p_id , c_id: c_id , c_title: c_title , c_code: c_code , questions: cr)
-                                            .navigationBarBackButtonHidden(true)
+                                        //                                        /*p_id: p_id*/   EditPaperQuestion(f_id:f_id  , c_id: c_id , c_title: c_title , c_code: c_code , questions: cr)
+                                        //                                            .navigationBarBackButtonHidden(true)
                                     }label: {
                                         Image(systemName: "square.and.pencil.circle")
                                             .font(.title)
@@ -661,16 +638,21 @@ struct StartMakingPaper: View {
                         RoundedRectangle(cornerRadius: 20)
                             .stroke(Color.green.opacity(0.5), lineWidth: 2)
                     )
-                    .onAppear{
-                        questionViewModel.getPaperQuestions(paperID: p_id)
+                    .onAppear {
+                        paperheaderViewModel.fetchExistingHeader(course: c_id) // Fetch headers first
+                    }
+                    .onChange(of: paperID) { newValue in
+                        if let newPaperID = newValue {
+                            questionViewModel.getPaperQuestions(paperID: newPaperID) // Fetch questions once paperID is set
+                        }
                     }
                 }
                 .onAppear{
                     topicViewModel.getCourseTopic(courseID: c_id)
                 }
-//                .onAppear{
-//                    cloViewModel.getCourseCLO(courseID: c_id)
-//                }
+                //                .onAppear{
+                //                    cloViewModel.getCourseCLO(courseID: c_id)
+                //                }
             }
             .navigationBarItems(leading: backButton)
             .background(Image("fiii").resizable().ignoresSafeArea())
@@ -719,7 +701,7 @@ struct StartMakingPaper: View {
             "q_marks": q_marks,
             "q_difficulty": options[selectedDifficulty],
             "t_id": concatenatedTopicIDs,  // Use the concatenated string of topic IDs
-            "p_id": p_id,
+//            "p_id": p_id,
             "f_id": f_id,
             "c_id": c_id,
             "clo_id": selectClo.clo_id
@@ -760,7 +742,7 @@ struct StartMakingPaper: View {
                 do {
                     let result = try JSONSerialization.jsonObject(with: data)
                     print("Result from server:", result)
-                    questionViewModel.getPaperQuestions(paperID: p_id)
+//                    questionViewModel.getPaperQuestions(paperID: p_id)
                     showAlert = true
                     DispatchQueue.main.async {
                         questions = ""
@@ -846,7 +828,7 @@ struct ImagePickerView: UIViewControllerRepresentable {
 struct SetPaper_Previews: PreviewProvider {
     static var previews: some View {
 //        SetPaper(f_id: 1, f_name: "", c_id: 1, c_title: "", c_code: "", p_id: 1)
-        StartMakingPaper(f_id: 1, f_name: "", c_id: 1, c_title: "", c_code: "", paperName: "", exam_date: "", degree: "", duration: 0, totalMarks: 0, p_id: 26, t_id: 1)
+        StartMakingPaper(f_id: 1, f_name: "", c_id: 1, c_title: "", c_code: "")
     }
 }
 

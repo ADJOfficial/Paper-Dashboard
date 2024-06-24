@@ -140,7 +140,7 @@ struct GetPaperQuestions: Hashable, Decodable, Encodable {
     var c_title: String
     var f_id: Int
     var f_name: String
-    var t_id: Int
+    var t_id: Int 
     var t_name: String
     var clo_code: String
     var clo_text: String
@@ -152,7 +152,7 @@ class QuestionViewModel: ObservableObject {
     @Published var selectedQuestionIndex: Int?
     
     func getPaperQuestions(paperID: Int) {
-        guard let url = URL(string: "http://localhost:3000/getquestion/\(paperID)") else {
+        guard let url = URL(string: "http://localhost:3000/getpaperquestion/\(paperID)") else {
             print("Invalid URL")
             return
         }
@@ -170,17 +170,23 @@ class QuestionViewModel: ObservableObject {
             
             do {
                 let decoder = JSONDecoder()
-//                decoder.dataDecodingStrategy = .base64
                 let questions = try decoder.decode([GetPaperQuestions].self, from: data)
                 DispatchQueue.main.async {
                     self.uploadedQuestions = questions
                 }
-            } catch {
+            } catch let DecodingError.keyNotFound(key, context) {
+                print("Key '\(key)' not found:", context.debugDescription)
+            } catch let DecodingError.valueNotFound(value, context) {
+                print("Value '\(value)' not found:", context.debugDescription)
+            } catch let DecodingError.typeMismatch(type, context) {
+                print("Type '\(type)' mismatch:", context.debugDescription)
+            } catch let error {
                 print("Error decoding data: \(error.localizedDescription)")
             }
         }
         .resume()
     }
+
     
     func getPaperAdditionalQuestions(paperID: Int) {
         guard let url = URL(string: "http://localhost:3000/getpaperadditionalquestion/\(paperID)") else {

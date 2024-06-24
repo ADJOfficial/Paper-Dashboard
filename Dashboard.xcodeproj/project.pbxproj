@@ -47,6 +47,8 @@
 		4472BDFF2C0C5466000D22B8 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4472BDFE2C0C5466000D22B8 /* Session.swift */; };
 		4472BE032C0C8375000D22B8 /* Difficulty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4472BE022C0C8375000D22B8 /* Difficulty.swift */; };
 		4472BE072C0CC9D5000D22B8 /* CourseGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4472BE062C0CC9D5000D22B8 /* CourseGridView.swift */; };
+		449A609D2C28260800E739A6 /* PaperHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449A609C2C28260800E739A6 /* PaperHistory.swift */; };
+		449A609F2C2826CE00E739A6 /* FindPaperHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449A609E2C2826CE00E739A6 /* FindPaperHistory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +93,8 @@
 		4472BDFE2C0C5466000D22B8 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		4472BE022C0C8375000D22B8 /* Difficulty.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Difficulty.swift; sourceTree = "<group>"; };
 		4472BE062C0CC9D5000D22B8 /* CourseGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseGridView.swift; sourceTree = "<group>"; };
+		449A609C2C28260800E739A6 /* PaperHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaperHistory.swift; sourceTree = "<group>"; };
+		449A609E2C2826CE00E739A6 /* FindPaperHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPaperHistory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +217,8 @@
 				442ACF5F2BC9C24300418115 /* Courses.swift */,
 				442ACF612BC9C25700418115 /* ApprovedPapers.swift */,
 				442ACF632BC9C27600418115 /* PrintedPapers.swift */,
+				449A609C2C28260800E739A6 /* PaperHistory.swift */,
+				449A609E2C2826CE00E739A6 /* FindPaperHistory.swift */,
 			);
 			path = DataCell;
 			sourceTree = "<group>";
@@ -344,6 +350,8 @@
 				442ACF362BC9BEF200418115 /* HODLogin.swift in Sources */,
 				442ACF6A2BC9C31500418115 /* UploadedPapers.swift in Sources */,
 				442ACF622BC9C25700418115 /* ApprovedPapers.swift in Sources */,
+				449A609D2C28260800E739A6 /* PaperHistory.swift in Sources */,
+				449A609F2C2826CE00E739A6 /* FindPaperHistory.swift in Sources */,
 				442ACF342BC9BEDF00418115 /* DirectorLogin.swift in Sources */,
 				442ACF542BC9C16E00418115 /* AssignCourses.swift in Sources */,
 				442ACF522BC9C15200418115 /* ViewCourses.swift in Sources */,

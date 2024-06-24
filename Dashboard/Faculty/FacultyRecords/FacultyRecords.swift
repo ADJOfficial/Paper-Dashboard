@@ -7,27 +7,27 @@
 ////
 import Foundation
 
-import Foundation
-
-class EditQuestionViewModel: ObservableObject {
-    @Published var question: GetPaperQuestions
-    @Published var options: [String]
-    @Published var topics: [Topic]
-    @Published var selectedDifficulty: Int
-    @Published var selectedTopic: Int?
-    
-    init(question: GetPaperQuestions, options: [String], topics: [Topic]) {
-        self.question = question
-        self.options = options
-        self.topics = topics
-        self.selectedDifficulty = options.firstIndex(of: question.q_difficulty) ?? 0
-        self.selectedTopic = topics.first { $0.t_id == question.t_id }?.t_id
-    }
-    
-    func saveChanges() {
-        // Add logic to save changes to the database or backend
-    }
-}
+//import Foundation
+//
+//class EditQuestionViewModel: ObservableObject {
+//    @Published var question: GetPaperQuestions
+//    @Published var options: [String]
+//    @Published var topics: [Topic]
+//    @Published var selectedDifficulty: Int
+//    @Published var selectedTopic: Int?
+//    
+//    init(question: GetPaperQuestions, options: [String], topics: [Topic]) {
+//        self.question = question
+//        self.options = options
+//        self.topics = topics
+//        self.selectedDifficulty = options.firstIndex(of: question.q_difficulty) ?? 0
+//        self.selectedTopic = topics.first { $0.t_id == question.t_id }?.t_id
+//    }
+//    
+//    func saveChanges() {
+//        // Add logic to save changes to the database or backend
+//    }
+//}
 
 
 
@@ -700,6 +700,137 @@ class CourseCLOGridViewWeightageViewModel: ObservableObject {
                 print("Error decoding !!!!data: \(error.localizedDescription)")
             }
         }
+        task.resume()
+    }
+}
+
+
+struct QDifficulty: Hashable, Decodable, Encodable {
+    var totalquestions: Int
+    var easy: Int
+    var medium: Int
+    var hard: Int
+}
+
+class DifficultyViewModel: ObservableObject {
+    @Published var questionD: [QDifficulty] = []
+    
+    func fetchExistingDifficulty(question: Int) {
+        guard let url = URL(string: "http://localhost:4000/getdifficulty/\(question)") else {
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let data = data, error == nil else {
+                return
+            }
+            
+            do {
+                let feedback = try JSONDecoder().decode([QDifficulty].self, from: data)
+                DispatchQueue.main.async {
+                    self?.questionD = feedback
+                    print("Fetched \(feedback.count) Difficulties")
+                }
+            } catch {
+                print("Error while getting data: \(error)")
+            }
+        }
+        
+        task.resume()
+    }
+}
+
+struct CourseSenior: Hashable, Decodable, Encodable {
+    
+    var f_id: Int
+    var f_name: String
+
+}
+
+class CourseSeniorViewModel: ObservableObject {
+    
+    @Published var senior: [CourseSenior] = []
+    
+    func fetchExistingSenior(course: Int) {
+        guard let url = URL(string: "http://localhost:2000/getfname/\(course)") else {
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let data = data, error == nil else {
+                return
+            }
+            
+            do {
+                let feedback = try JSONDecoder().decode([CourseSenior].self, from: data)
+                DispatchQueue.main.async {
+                    self?.senior = feedback
+                    print("Fetched \(feedback.count) Senior")
+                }
+            } catch let DecodingError.keyNotFound(key, context) {
+                print("Key '\(key)' not found:", context.debugDescription)
+            } catch let DecodingError.valueNotFound(value, context) {
+                print("Value '\(value)' not found:", context.debugDescription)
+            } catch let DecodingError.typeMismatch(type, context) {
+                print("Type '\(type)' mismatch:", context.debugDescription)
+            } catch let error {
+                print("Error decoding data: \(error.localizedDescription)")
+            }
+        }
+        
+        task.resume()
+    }
+}
+
+struct PaperHeader: Hashable, Decodable, Encodable {
+    
+    var p_id: Int
+    var p_name: String
+    var duration: Int
+    var degree: String
+    var t_marks: Int
+    var term: String
+    var year: Int
+    var exam_date: String
+    var semester: String
+    var status: String
+    var t_questions: Int
+    var f_id: Int
+    var c_id: Int
+
+}
+
+class PaperHeaderViewModel: ObservableObject {
+    
+    @Published var header: [PaperHeader] = []
+    
+    func fetchExistingHeader(course: Int) {
+        guard let url = URL(string: "http://localhost:4000/getpaperheader/\(course)") else {
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+            guard let data = data, error == nil else {
+                return
+            }
+            
+            do {
+                let feedback = try JSONDecoder().decode([PaperHeader].self, from: data)
+                DispatchQueue.main.async {
+                    self?.header = feedback
+                    print("Fetched \(feedback.count) Heahers")
+                }
+            } catch let DecodingError.keyNotFound(key, context) {
+                print("Key '\(key)' not found:", context.debugDescription)
+            } catch let DecodingError.valueNotFound(value, context) {
+                print("Value '\(value)' not found:", context.debugDescription)
+            } catch let DecodingError.typeMismatch(type, context) {
+                print("Type '\(type)' mismatch:", context.debugDescription)
+            } catch let error {
+                print("Error decoding data: \(error.localizedDescription)")
+            }
+        }
+        
         task.resume()
     }
 }

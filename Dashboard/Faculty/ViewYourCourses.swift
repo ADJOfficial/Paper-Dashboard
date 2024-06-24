@@ -116,6 +116,9 @@ struct Subject: View {
     var t_name: String
     
     @StateObject private var uploadedPaperViewModel = UploadedPaperViewModel()
+    @StateObject private var seniorViewModel = CourseSeniorViewModel()
+    @State private var isSenior: Bool = false
+    
     var body: some View {
         
         NavigationView{
@@ -176,12 +179,12 @@ struct Subject: View {
                     .font(.title2)
                     .foregroundColor(.green)
                     .padding(.all)
-                    
+
                     NavigationLink{
-                        SetPaper(f_id: f_id , f_name: f_name , c_id: c_id , c_title: c_title , c_code: c_code , p_id: p_id)
+                        CourseGridView(c_id: c_id, c_title: c_title, c_code: c_code)
                             .navigationBarBackButtonHidden(true)
                     } label: {
-                        Text("Set Paper")
+                        Text("Grid View")
                             .underline()
                     }
                     .bold()
@@ -202,12 +205,36 @@ struct Subject: View {
                     .font(.title2)
                     .foregroundColor(.green)
                     .padding(.all)
+                
+                    VStack{
+                        if isSenior {
+                            NavigationLink {
+                                SetPaper(f_id: f_id, f_name: f_name, c_id: c_id, c_title: c_title, c_code: c_code, p_id: p_id)
+                                    .navigationBarBackButtonHidden(true)
+                            } label: {
+                                Text("Create Paper Header")
+                                    .underline()
+                            }
+                            .bold()
+                            .padding()
+                            .font(.title2)
+                            .foregroundColor(.green)
+                            .padding(.all)
+                        }
+                    }
+                    .onAppear {
+                        seniorViewModel.fetchExistingSenior(course: c_id)
+                    }
+                    .onChange(of: seniorViewModel.senior) { newValue in
+                        isSenior = newValue.contains { $0.f_id == f_id }
+                    }
+                    
                     
                     NavigationLink{
-                        CourseGridView(c_id: c_id, c_title: c_title, c_code: c_code)
+                        StartMakingPaper(f_id: f_id, f_name: f_name, c_id: c_id, c_title: c_title, c_code: c_code)
                             .navigationBarBackButtonHidden(true)
                     } label: {
-                        Text("Grid View")
+                        Text("Create Paper Question")
                             .underline()
                     }
                     .bold()
@@ -215,6 +242,7 @@ struct Subject: View {
                     .font(.title2)
                     .foregroundColor(.green)
                     .padding(.all)
+                    
                 }
                 Spacer()
             }
@@ -236,9 +264,9 @@ struct Subject: View {
 
 struct ViewYourCourses_Previews: PreviewProvider {
     static var previews: some View {
-        Mail(f_id: 1,c_id: 1,fb_details: "", c_title: "", c_code: "", f_name: "", q_id: 1, p_id: 1)
+//        Mail(f_id: 1,c_id: 1,fb_details: "", c_title: "", c_code: "", f_name: "", q_id: 1, p_id: 1)
 //        ViewYourCourses(f_id: 0, c_id: 0, c_code: "", c_title: "", f_name: "")
-//        Subject(f_id: 1, f_name: "", c_id: 0, c_title: "", c_code: "" , p_id: 0 , t_id: 0, t_name: "")
+        Subject(f_id: 1, f_name: "", c_id: 1, c_title: "", c_code: "" , p_id: 0 , t_id: 0, t_name: "")
     }
 }
 

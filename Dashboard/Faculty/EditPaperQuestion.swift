@@ -177,6 +177,9 @@ struct EditPaperQuestion: View {
         .sheet(isPresented: $isShowingImagePicker) {
             ImagePickerView(result: handleImagePickerResult)
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Question Updated Successfully"), message: Text("Go Back To Update Any Other Question"), dismissButton: .default(Text("OK")))
+        }
     }
     @Environment(\.presentationMode) var presentationMode
     private var backButton: some View {
@@ -203,7 +206,7 @@ struct EditPaperQuestion: View {
     }
     
     func updateQuestion() {
-        guard let url = URL(string: "http://localhost:4000/updatequestion/\(questions.q_id)") else {
+        guard let url = URL(string: "http://localhost:4000/updatequestion1/\(questions.q_id)") else {
             print("Invalid URL")
             return
         }
@@ -285,8 +288,8 @@ extension Data {
         }
     }
 }
-struct EditPaperQuestion_Previews: PreviewProvider {
-    static var previews: some View {
-        EditPaperQuestion(f_id:0 , p_id: 0 ,  c_id: 0, c_title: "", c_code: "", questions: GetPaperQuestions(q_id: 0, q_text: "", q_marks: 0, q_difficulty: "", q_verification: "", p_id: 0, c_id: 0, c_code: "", c_title: "", f_id: 0, f_name: "", t_id: 0, t_name: "", clo_code: "", clo_text: ""))
-    }
-}
+//struct EditPaperQuestion_Previews: PreviewProvider {
+//    static var previews: some View {
+//        EditPaperQuestion(f_id:0 , p_id: 0 ,  c_id: 0, c_title: "", c_code: "", questions: GetPaperQuestions(q_id: 0, q_text: "", q_marks: 0, q_difficulty: "", q_verification: "", p_id: 0, c_id: 0, c_code: "", c_title: "", f_id: 0, f_name: "", t_id: 0, t_name: "", clo_code: "", clo_text: ""))
+//    }
+//}
