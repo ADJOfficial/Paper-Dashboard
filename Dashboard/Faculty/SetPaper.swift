@@ -367,9 +367,22 @@ struct StartMakingPaper: View {
     var c_title: String
     var c_code: String
     @State private var paperID: Int?
-
+    @State private var tquestion: Int?
+    
+    @State private var easy: Int?
+    @State private var medium: Int?
+    @State private var hard: Int?
+    @State private var easyCount = 0
+    @State private var mediumCount = 0
+    @State private var hardCount = 0
+    
+    @State private var isAccepted = false // For Accept All CheckMark
+    @State private var selectedButton: [Int: String] = [:]
     
     @State private var showAlert = false
+    @State private var showAlert1 = false
+    @State private var showAlertWarning = false
+    @State private var alertMessage = ""
     @State private var showPopover = false
     
     @State private var q_marks = ""
@@ -392,7 +405,9 @@ struct StartMakingPaper: View {
     @StateObject private var  cloViewModel = CLOViewModel()
     @StateObject private var  topiccloViewModel = TopicCLOViewModel()
     @StateObject private var  paperheaderViewModel = PaperHeaderViewModel()
-    
+    @StateObject private var  difficultyViewModel = DifficultyViewModel()
+    @StateObject private var seniorViewModel = CourseSeniorViewModel()
+    @State private var isSenior: Bool = false
     
     var body: some View {
         NavigationView {
@@ -428,6 +443,37 @@ struct StartMakingPaper: View {
                                     .onAppear {
                                         self.paperID = cr.p_id // Store the fetched p_id
                                     }
+                                Text("\(cr.t_questions)")
+                                    .bold()
+                                    .padding(.all,1)
+                                    .frame(maxWidth: .infinity , alignment: .center)
+                                    .onAppear {
+                                        self.tquestion = cr.t_questions // Store the fetched p_id
+                                    }
+                                ForEach(difficultyViewModel.questionD.indices, id: \.self) { diffIndex in
+                                    let cr = difficultyViewModel.questionD[diffIndex]
+                                    Text("Easy : \(cr.easy)")
+                                        .bold()
+                                        .padding(.all,1)
+                                        .frame(maxWidth: .infinity , alignment: .center)
+                                        .onAppear {
+                                            self.easy = cr.easy
+                                        }
+                                    Text("Medium : \(cr.medium)")
+                                        .bold()
+                                        .padding(.all,1)
+                                        .frame(maxWidth: .infinity , alignment: .center)
+                                        .onAppear {
+                                            self.medium = cr.medium
+                                        }
+                                    Text("Hard : \(cr.hard)")
+                                        .bold()
+                                        .padding(.all,1)
+                                        .frame(maxWidth: .infinity , alignment: .center)
+                                        .onAppear {
+                                            self.hard = cr.hard
+                                        }
+                                }
                             }
                         }
                         if paperheaderViewModel.header.isEmpty {
@@ -448,6 +494,11 @@ struct StartMakingPaper: View {
                 )
                 .onAppear{
                     paperheaderViewModel.fetchExistingHeader(course: c_id)
+                }
+                .onChange(of: tquestion) { newValue in
+                    if let newPaperID = newValue {
+                        difficultyViewModel.fetchExistingDifficulty(question: newPaperID)
+                    }
                 }
                 VStack{
                     HStack{
@@ -502,18 +553,9 @@ struct StartMakingPaper: View {
                             Text("Select")
                                 .foregroundColor(.green)
                                 .padding()
-                            //                                .background(Color.green)
                                 .cornerRadius(8)
                         }
                     }
-                    //                    VStack{
-                    //                        ForEach(topiccloViewModel.topicCLO, id: \.self) { clo in
-                    //                            HStack{
-                    //                                Text(clo.clo_code)
-                    //                                    .foregroundColor(Color.white)
-                    //                            }
-                    //                        }
-                    //                    }
                     HStack {
                         Spacer()
                         
@@ -543,8 +585,9 @@ struct StartMakingPaper: View {
                             .padding(.horizontal)
                         Spacer()
                         Button("Create"){
-                            createQuestion()
-                            showAlert
+                            if let paperID = paperID{
+                                createQuestion(paperID: paperID)
+                            }
                         }
                         .bold()
                         .padding()
@@ -552,7 +595,6 @@ struct StartMakingPaper: View {
                         .background(Color.green)
                         .cornerRadius(8)
                         .frame(width: 100)
-                        //                            .padding(.horizontal)
                         .frame(alignment: .trailing)
                         Spacer()
                     }
@@ -593,6 +635,19 @@ struct StartMakingPaper: View {
                                             Text("[ \(cr.q_difficulty) , \(cr.q_marks) , \(cr.t_name) , \(cr.clo_code) ]")
                                                 .foregroundColor(Color.yellow)
                                                 .frame(maxWidth: .infinity, alignment: .trailing)
+                                                .onAppear {
+                                                    // Update difficulty counts
+                                                    switch cr.q_difficulty {
+                                                    case "Easy":
+                                                        easyCount += 1
+                                                    case "Medium":
+                                                        mediumCount += 1
+                                                    case "Hard":
+                                                        hardCount += 1
+                                                    default:
+                                                        break
+                                                    }
+                                                }
                                                 .onTapGesture {
                                                     // Toggle showPopover to true
                                                     showPopover.toggle()
@@ -628,6 +683,42 @@ struct StartMakingPaper: View {
                                     .padding()
                                     .frame(maxWidth: .infinity)
                             }
+                            VStack {
+                                if isSenior {
+                                    Button(action: {
+                                        if validateQuestionDistribution() {
+                                            isAccepted.toggle()
+                                            if isAccepted {
+                                                // Iterate through all table records and set them as "Uploaded"
+                                                for question in questionViewModel.uploadedQuestions {
+                                                    selectedButton[question.q_id] = "Uploaded"
+                                                }
+                                                updateAllQuestionStatus(q_verification: "Uploaded")
+                                            } else {
+                                                selectedButton = [:]
+                                                updateAllQuestionStatus(q_verification: "")
+                                            }
+                                        } else {
+                                            showAlertWarning = true
+                                        }
+                                    }) {
+                                        Text("Upload")
+                                            .bold()
+                                            .padding()
+                                            .foregroundColor(.black)
+                                            .background(Color.green)
+                                            .cornerRadius(8)
+                                            .frame(width: 100)
+                                            .frame(alignment: .trailing)
+                                    }
+                                }
+                            }
+                        }
+                        .onAppear {
+                            seniorViewModel.fetchExistingSenior(course: c_id)
+                        }
+                        .onChange(of: seniorViewModel.senior) { newValue in
+                            isSenior = newValue.contains { $0.f_id == f_id }
                         }
                         .padding()
                     }
@@ -639,7 +730,7 @@ struct StartMakingPaper: View {
                             .stroke(Color.green.opacity(0.5), lineWidth: 2)
                     )
                     .onAppear {
-                        paperheaderViewModel.fetchExistingHeader(course: c_id) // Fetch headers first
+                        paperheaderViewModel.fetchExistingHeader(course: c_id)
                     }
                     .onChange(of: paperID) { newValue in
                         if let newPaperID = newValue {
@@ -650,9 +741,6 @@ struct StartMakingPaper: View {
                 .onAppear{
                     topicViewModel.getCourseTopic(courseID: c_id)
                 }
-                //                .onAppear{
-                //                    cloViewModel.getCourseCLO(courseID: c_id)
-                //                }
             }
             .navigationBarItems(leading: backButton)
             .background(Image("fiii").resizable().ignoresSafeArea())
@@ -661,6 +749,12 @@ struct StartMakingPaper: View {
             }
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Question Created Successfully"), message: Text("Click on Plus Button Below To Add More Question For This Paper if You Want..."), dismissButton: .default(Text("OK")))
+            }
+            .alert(isPresented: $showAlert1) {
+                Alert(title: Text("Uploaded"), message: Text("Question Uploaded Successfully Wait For Director to Approve Question"), dismissButton: .default(Text("OK")))
+            }
+            .alert(isPresented: $showAlertWarning) {
+                Alert(title: Text("Warning"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
             }
         }
     }
@@ -674,7 +768,81 @@ struct StartMakingPaper: View {
                 .imageScale(.large)
         }
     }
-    func createQuestion() {
+    
+    func validateQuestionDistribution() -> Bool {
+        guard let tquestion = tquestion else {
+            alertMessage = "Total question count not loaded correctly."
+            return false
+        }
+        guard let easy = easy, let medium = medium, let hard = hard else {
+            alertMessage = "Difficulty question counts not loaded correctly."
+            return false
+        }
+        
+        let totalDifficultyQuestions = easy + medium + hard
+        
+        if tquestion != totalDifficultyQuestions {
+            alertMessage = "Total number of questions does not match the required total."
+            return false
+        }
+        
+        // Validate the number of easy, medium, and hard questions
+        if easy != easyCount {
+            alertMessage = "Number of easy questions is not complete."
+            return false
+        }
+        if medium != mediumCount {
+            alertMessage = "Number of medium questions is not complete."
+            return false
+        }
+        if hard != hardCount {
+            alertMessage = "Number of hard questions is not complete."
+            return false
+        }
+        
+        return true
+    }
+    
+    func updateAllQuestionStatus(q_verification: String) {
+        for index in 0..<questionViewModel.uploadedQuestions.count {
+            let questionId = questionViewModel.uploadedQuestions[index].q_id
+            updateQuestionStatus(questionId: questionId, q_verification: q_verification)
+        }
+    }
+
+    private func updateQuestionStatus(questionId: Int, q_verification: String) {
+        var qVerificationValue: String
+        if q_verification.isEmpty {
+            qVerificationValue = "Pending"
+        } else {
+            qVerificationValue = q_verification
+        }
+
+        let url = URL(string: "http://localhost:4000/updateqverification/\(questionId)")!
+        let parameters = ["q_verification": qVerificationValue]
+
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: parameters) else {
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error updating question status: \(error.localizedDescription)")
+            } else if let data = data {
+                if let responseString = String(data: data, encoding: .utf8) {
+                    print("Question status updated successfully: \(responseString)")
+                    showAlert1 = true
+                }
+            }
+        }.resume()
+    }
+    
+    func createQuestion(paperID: Int) {
         guard let url = URL(string: "http://localhost:4000/createquestion") else {
             return
         }
@@ -696,17 +864,19 @@ struct StartMakingPaper: View {
 
         let concatenatedTopicIDs = selectedTopics.map { String($0) }.joined(separator: ",") // Convert to comma-separated string
 
-        let question = [
+        var question = [
             "q_text": questions,
             "q_marks": q_marks,
             "q_difficulty": options[selectedDifficulty],
             "t_id": concatenatedTopicIDs,  // Use the concatenated string of topic IDs
-//            "p_id": p_id,
+            "p_id": paperID,
             "f_id": f_id,
             "c_id": c_id,
             "clo_id": selectClo.clo_id
         ] as [String: Any]
 
+
+        
         let boundary = UUID().uuidString
         let boundaryPrefix = "--\(boundary)\r\n"
         let boundarySuffix = "--\(boundary)--\r\n"
@@ -742,7 +912,7 @@ struct StartMakingPaper: View {
                 do {
                     let result = try JSONSerialization.jsonObject(with: data)
                     print("Result from server:", result)
-//                    questionViewModel.getPaperQuestions(paperID: p_id)
+                    questionViewModel.getPaperQuestions(paperID: paperID)
                     showAlert = true
                     DispatchQueue.main.async {
                         questions = ""
@@ -845,3 +1015,4 @@ struct SetPaper_Previews: PreviewProvider {
 //            print("Selected CLO not found")
 //            return
 //        }
+
